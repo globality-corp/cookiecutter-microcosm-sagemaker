@@ -1,4 +1,4 @@
-# {{cookiecutter.package_name}}
+# {{cookiecutter.repository_name}}
 
 {{cookiecutter.short_description}}
 
@@ -12,30 +12,21 @@ To setup the project for local development, make sure you have a virtualenv setu
 This will install all the dependencies and set the project up for local usage.
 
 
-## Postgres
-
-The service requires a Postgres user and two datbases (one is for testing):
-
-    createuser {{cookiecutter.package_name}}
-    createdb -O {{cookiecutter.package_name}} {{cookiecutter.package_name}}_db
-    createdb -O {{cookiecutter.package_name}} {{cookiecutter.package_name}}_test_db
-
-The service schema can be initialized using:
-
-    createall [-D]
-
-
 ## Flask
 
 To run the Flask web server when developing locally, invoke the following:
 
     runserver
 
-The service publishes several endpoints by default.
+The service publishes several endpoints
 
- -  The service publishes its own health:
+ -  The service supports SageMaker's ping endpoint:
 
-        GET /api/health
+        GET /ping
+
+ -  The service supports invocations as expected by SageMaker:
+
+        POST /invocations
 
  -  The service publishes a [crawlable](https://en.wikipedia.org/wiki/HATEOAS) endpoint for discovery
     of its operations:

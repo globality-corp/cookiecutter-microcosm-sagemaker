@@ -12,6 +12,20 @@ To setup the project for local development, make sure you have a virtualenv setu
 This will install all the dependencies and set the project up for local usage.
 
 
+## Training
+
+To train on a dataset locally, run
+
+    train
+
+To see supported arguments, run
+
+    train --help
+
+You can also train on SageMaker using the
+[`globality-ml-scripts`](https://github.com/globality-corp/globality-ml-scripts)
+CLI.
+
 ## Flask
 
 To run the Flask web server when developing locally, invoke the following:

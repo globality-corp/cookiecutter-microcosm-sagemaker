@@ -1,1 +1,2 @@
 recursive-include {{cookiecutter.package_name}} *.yml
+recursive-include {{cookiecutter.package_name}} *.txt

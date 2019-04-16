@@ -1,4 +1,4 @@
-# {{cookiecutter.repository_name}}
+# {{cookiecutter.project_name}}
 
 {{cookiecutter.short_description}}
 

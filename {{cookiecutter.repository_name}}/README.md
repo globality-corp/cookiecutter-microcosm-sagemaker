@@ -12,6 +12,19 @@ To setup the project for local development, make sure you have a virtualenv setu
 This will install all the dependencies and set the project up for local usage.
 
 
+### Directory structure
+
+- `bundles/`: Contains the bundles.  Each bundle wraps an ML model and also
+  handles the setup and data transformation around the given model.
+- `commands/`: Contains the `app` and `config` information for use by the CLI
+  commands defined in `microcosm-sagemaker`.
+- `evaluations/`: Evaluation metrics
+- `models/`: These are data models, **not** ML models
+- `resources/`: REST resources
+- `routes/`: REST routes
+- `tests/`: Tests
+
+
 ## Training
 
 To train on a dataset locally, run

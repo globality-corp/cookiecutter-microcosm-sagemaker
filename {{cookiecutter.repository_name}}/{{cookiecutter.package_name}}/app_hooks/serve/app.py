@@ -37,17 +37,16 @@ def create_app(debug=False,
         # Sagemaker basics
         "sagemaker",
 
-        # bundles
+        # Bundles
         "example_bundle",
     )
 
     if not model_only:
         graph.use(
-            # conventions
-            "swagger_convention",
+            # SageMaker conventions
             "ping_convention",
 
-            # routes
+            # Routes
             "invocations_route",
         )
 

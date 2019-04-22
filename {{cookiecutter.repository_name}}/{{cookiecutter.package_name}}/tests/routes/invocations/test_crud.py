@@ -14,7 +14,7 @@ from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 class TestInvocationsRoute(InvocationsRouteTestCase):
     def setup(self):
         super().setup(
-            input_artifact_path=get_fixture_path('example_input_artifact')
+            input_artifact_path=get_fixture_path("example_input_artifact")
         )
 
     def test_search(self):

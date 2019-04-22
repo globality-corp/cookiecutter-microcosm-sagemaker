@@ -4,7 +4,7 @@ from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
 from microcosm_sagemaker.bundle import Bundle
 from microcosm_sagemaker.input_data import InputData
 
-from {{ cookiecutter.package_name }}.models.example_prediction import ExamplePrediction
+from {{ cookiecutter.package_name }}.data_models.example_prediction import ExamplePrediction
 
 
 @binding("example_bundle")
@@ -66,7 +66,7 @@ class ExampleBundle(Bundle):
 
         # Save the trained model
         # For this example, we just store the param we read during training
-        with open(output_artifact.path / "example.txt", 'w') as output_file:
+        with open(output_artifact.path / "example.txt", "w") as output_file:
             output_file.write(str(self.example_trained_param))
 
     def load(self, input_artifact: InputArtifact):

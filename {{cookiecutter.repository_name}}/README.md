@@ -16,10 +16,13 @@ This will install all the dependencies and set the project up for local usage.
 
 - `bundles/`: Contains the bundles.  Each bundle wraps an ML model and also
   handles the setup and data transformation around the given model.
-- `commands/`: Contains the `app` and `config` information for use by the CLI
+- `app_hooks/`: Contains the `app` and `config` information for use by the CLI
   commands defined in `microcosm-sagemaker`.
 - `evaluations/`: Evaluation metrics
-- `models/`: These are data models, **not** ML models
+- `data_models/`: These are data models, **not** ML models.  Note that in
+  standard microcosm services, this directory would be called `models/`, but to
+  avoid confusion with the ML term, we use the more explicit `data_models/`
+  here.
 - `resources/`: REST resources
 - `routes/`: REST routes
 - `tests/`: Tests

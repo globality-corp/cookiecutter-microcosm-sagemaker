@@ -3,7 +3,7 @@ from pathlib import Path
 from hamcrest import has_entries
 from microcosm_sagemaker.testing.bytes_extractor import (
     ExtractorMatcherPair,
-    json_extractor
+    json_extractor,
 )
 from microcosm_sagemaker.testing.train import TrainCliTestCase
 
@@ -22,9 +22,9 @@ class TestTrainCli(TrainCliTestCase):
         )
 
         super().test_train(
-            input_data_path=get_fixture_path('example_input_data'),
-            gold_output_artifact_path=get_fixture_path('example_gold_output_artifact'),
+            input_data_path=get_fixture_path("example_input_data"),
+            gold_output_artifact_path=get_fixture_path("example_gold_output_artifact"),
             output_artifact_matchers={
-                Path('configuration.json'): configuration_extractor_matcher,
+                Path("configuration.json"): configuration_extractor_matcher,
             }
         )

@@ -28,9 +28,9 @@ setup(
     ],
     entry_points={
         "microcosm_sagemaker.app_hooks": [
-            "train = {{ cookiecutter.package_name }}.commands.train.app:create_app",
-            "serve = {{ cookiecutter.package_name }}.commands.serve.app:create_app",
-            "evaluate = {{ cookiecutter.package_name }}.commands.evaluate.app:create_app",
+            "train = {{ cookiecutter.package_name }}.app_hooks.train.app:create_app",
+            "serve = {{ cookiecutter.package_name }}.app_hooks.serve.app:create_app",
+            "evaluate = {{ cookiecutter.package_name }}.app_hooks.evaluate.app:create_app",
         ],
     },
     extras_require={

@@ -7,7 +7,7 @@ from microcosm.loaders import load_each, load_from_dict, load_from_environ
 from microcosm_sagemaker.loaders import load_train_conventions
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
-from {{ cookiecutter.package_name }}.commands.train.config import load_default_config
+from {{ cookiecutter.package_name }}.app_hooks.train.config import load_default_config
 
 
 def create_app(debug=False, testing=False, extra_config={}, extra_deps=[]):

@@ -1,3 +1,5 @@
+from typing import List
+
 from microcosm.api import binding, defaults
 from microcosm_logging.decorators import logger
 from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
@@ -18,7 +20,7 @@ class ExampleBundle(Bundle):
 
         self.example_param = config.example_param
 
-    def fit(self, input_data: InputData):
+    def fit(self, input_data: InputData) -> None:
         """
         Perform training
 
@@ -34,7 +36,7 @@ class ExampleBundle(Bundle):
         with open(input_data.path / "example.txt") as input_file:
             self.example_trained_param = float(input_file.read())
 
-    def predict(self, example_arg: float):
+    def predict(self, example_arg: float) -> List[ExamplePrediction]:
         """
         Predict using the trained model.
 
@@ -53,7 +55,7 @@ class ExampleBundle(Bundle):
             ),
         ]
 
-    def save(self, output_artifact: OutputArtifact):
+    def save(self, output_artifact: OutputArtifact) -> None:
         """
         Save the trained model
 
@@ -69,7 +71,7 @@ class ExampleBundle(Bundle):
         with open(output_artifact.path / "example.txt", "w") as output_file:
             output_file.write(str(self.example_trained_param))
 
-    def load(self, input_artifact: InputArtifact):
+    def load(self, input_artifact: InputArtifact) -> None:
         """
         Load the trained model
 

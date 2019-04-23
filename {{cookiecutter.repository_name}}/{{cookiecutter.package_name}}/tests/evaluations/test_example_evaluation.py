@@ -6,13 +6,13 @@ from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
 
 
 class TestExampleEvaluation:
-    def setup(self):
+    def setup(self) -> None:
         self.graph = create_app(extra_deps=["example_evaluation"])
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
         self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
 
-    def test_evaluation(self):
+    def test_evaluation(self) -> None:
         bundle = self.graph.active_bundle
         bundle.load(self.input_artifact)
 

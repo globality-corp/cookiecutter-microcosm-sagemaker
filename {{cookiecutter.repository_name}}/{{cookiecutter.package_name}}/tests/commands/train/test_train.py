@@ -11,7 +11,7 @@ from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestTrainCli(TrainCliTestCase):
-    def test_train(self):
+    def test_train(self) -> None:
         configuration_extractor_matcher = ExtractorMatcherPair(
             extractor=json_extractor,
             matcher=has_entries(

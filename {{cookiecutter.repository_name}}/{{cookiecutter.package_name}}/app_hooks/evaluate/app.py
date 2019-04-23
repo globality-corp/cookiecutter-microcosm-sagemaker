@@ -2,24 +2,37 @@
 Create the application.
 
 """
+from typing import Callable, Iterable, Optional
+
 from microcosm.api import create_object_graph
-from microcosm.loaders import load_each, load_from_dict
+from microcosm.config.model import Configuration
+from microcosm.loaders import load_each
+from microcosm.metadata import Metadata
+from microcosm.object_graph import ObjectGraph
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
+from {{ cookiecutter.package_name }}.app_hooks.evaluate.config import load_default_config
 
 
-def create_app(debug=False,
-               testing=False,
-               extra_config={},
-               input_artifact=None):
+Loader = Callable[[Metadata], Configuration]
+
+
+def create_app(
+    debug: bool = False,
+    testing: bool = False,
+    loaders: Optional[Iterable[Loader]] = None,
+) -> ObjectGraph:
     """
     Create the object graph for serving.
 
     """
+    if loaders is None:
+        loaders = []
+
     loader = load_each(
-        input_artifact.load_config,
-        load_from_dict(extra_config),
+        load_default_config,
+        *loaders,
     )
 
     graph = create_object_graph(
@@ -33,9 +46,7 @@ def create_app(debug=False,
         "logging",
 
         # Sagemaker basics
-        "sagemaker_metrics",
-        "active_bundle",
-        "active_evaluation",
+        "sagemaker",
 
         # Bundles
         "example_bundle",

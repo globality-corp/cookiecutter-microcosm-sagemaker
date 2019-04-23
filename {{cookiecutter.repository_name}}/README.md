@@ -48,22 +48,12 @@ To run the Flask web server when developing locally, invoke the following:
 
     runserver
 
-The service publishes several endpoints
+The service publishes two endpoints, as expected by SageMaker:
 
  -  The service supports SageMaker's ping endpoint:
 
         GET /ping
 
- -  The service supports invocations as expected by SageMaker:
+ -  The service supports invocations:
 
         POST /invocations
-
- -  The service publishes a [crawlable](https://en.wikipedia.org/wiki/HATEOAS) endpoint for discovery
-    of its operations:
-
-        GET /api/
-
- -  The service publishes [Swagger](http://swagger.io/) definitions for its operations (by API version)
-    using [HAL JSON](http://stateless.co/hal_specification.html):
-
-        GET /api/v1/swagger

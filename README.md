@@ -8,27 +8,33 @@ Project template for a `microcosm`-based ML service using SageMaker.
 
         pip install cookiecutter
 
- 2. Change to an appropriate working directory.
+ 1. Change to an appropriate working directory.
 
- 3. Run cookiecutter against this repository:
+ 1. Run cookiecutter against this repository:
 
         cookiecutter https://github.com/globality-corp/cookiecutter-microcosm-sagemaker
 
- 4. Answer the questions. 
+ 1. Answer the questions. 
 
- 5. Change into the `{{ repository_name }}` directory and initialize a new git project from there:
+ 1. Change into the `{{ repository_name }}` directory
+
+ 1. *[Globality only]* Run the `globality-build`
+    [setup steps](https://github.com/globality-corp/globality-build#usage-template-generation).
+ 
+ 1. Initialize a new git project:
 
         git init
         git add .
         git commit -m "Initial commit"
 
 
-## Development
+## Cookiecutter development
 
-The `scripts/instantiate.sh` script is useful during development of this
-cookiecutter.  It will instantiate the cookiecutter with default parameters,
-removing any previous instantiations.  You can then cd into the instantiated
-directory to run linting and unit tests.
+When experimenting with changes to this cookiecutter, you may find the
+`scripts/instantiate.sh` script to be useful.  It will instantiate the
+cookiecutter with the default parameters, first removing any previous
+instantiations. You can then cd into the instantiated directory to run linting
+and unit tests.
 
 Below describes one possible local development flow.
 

@@ -13,14 +13,14 @@ from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
 
 
 class TestExampleBundle:
-    def setup(self):
+    def setup(self) -> None:
         self.graph = create_app(extra_deps=["example_bundle"])
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
         self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
         self.gold_output_artifact_path = get_fixture_path("example_gold_output_artifact")
 
-    def check_bundle_prediction(self):
+    def check_bundle_prediction(self) -> None:
         assert_that(
             self.graph.example_bundle.predict(1.0),
             contains(has_properties(
@@ -29,15 +29,15 @@ class TestExampleBundle:
             )),
         )
 
-    def test_fit(self):
+    def test_fit(self) -> None:
         self.graph.example_bundle.fit(self.input_data)
         self.check_bundle_prediction()
 
-    def test_load(self):
+    def test_load(self) -> None:
         self.graph.example_bundle.load(self.input_artifact)
         self.check_bundle_prediction()
 
-    def test_save(self):
+    def test_save(self) -> None:
         self.graph.example_bundle.load(self.input_artifact)
 
         with tempfile.TemporaryDirectory() as output_artifact_path:

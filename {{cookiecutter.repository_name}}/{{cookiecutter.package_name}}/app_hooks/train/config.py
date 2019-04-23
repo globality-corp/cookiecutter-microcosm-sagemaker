@@ -3,9 +3,10 @@ Configure the application.
 
 """
 from microcosm.config.model import Configuration
+from microcosm.metadata import Metadata
 
 
-def load_default_config(metadata):
+def load_default_config(metadata: Metadata) -> Configuration:
     """
     Construct application default configuration.
 

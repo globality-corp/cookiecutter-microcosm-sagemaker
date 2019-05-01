@@ -15,6 +15,7 @@ from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
 class TestExampleBundle:
     def setup(self) -> None:
         self.graph = create_app(extra_deps=["example_bundle"])
+        self.training_initializers = self.graph.training_initializers
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
         self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
@@ -30,6 +31,7 @@ class TestExampleBundle:
         )
 
     def test_fit(self) -> None:
+        self.training_initializers.init()
         self.graph.example_bundle.fit(self.input_data)
         self.check_bundle_prediction()
 

@@ -49,7 +49,7 @@ In the second shell,
     cd ml-papaya-extractor
     pyenv virtualenv 3.7.2 ml-papaya-extractor
     pyenv shell ml-papaya-extractor
-    pip install flake8 flake8-print flake8-logging-format flake8-isort flake-quotes
+    pip install flake8 flake8-print flake8-logging-format flake8-isort flake8-quotes
 
 ### Development
 During development, make all changes to the cookiecutter template, not to the
@@ -60,7 +60,7 @@ the first shell, run
 
 Then in the second shell, to run unit tests, run
 
-    cd .. && cd ml-papaya-extractor && pip install -e . && python setup.py nosetests
+    cd .. && cd ml-papaya-extractor && pip install -e '.[test]' && python setup.py nosetests
 
 The initial `cd` commands are because the `instantiate` step above clobbers the
 `ml-papaya-extractor` directory.

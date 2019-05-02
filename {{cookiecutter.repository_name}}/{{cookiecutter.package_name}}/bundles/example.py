@@ -4,6 +4,7 @@ from microcosm.api import binding, defaults
 from microcosm_logging.decorators import logger
 from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
 from microcosm_sagemaker.bundle import Bundle
+from microcosm_sagemaker.decorators import bundle
 from microcosm_sagemaker.input_data import InputData
 
 from {{ cookiecutter.package_name }}.data_models.example_prediction import ExamplePrediction
@@ -13,6 +14,7 @@ from {{ cookiecutter.package_name }}.data_models.example_prediction import Examp
 @defaults(
     example_param=1.0,
 )
+@bundle("example")
 @logger
 class ExampleBundle(Bundle):
     def __init__(self, graph):

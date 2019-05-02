@@ -13,7 +13,9 @@ class TestExampleEvaluation:
         self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
 
     def test_evaluation(self) -> None:
-        bundle = self.graph.active_bundle
-        bundle.load(self.input_artifact)
+        self.graph.bundles.load(self.input_artifact)
 
-        self.graph.example_evaluation(bundle, self.input_data)
+        self.graph.example_evaluation(
+            self.graph.active_bundle,
+            self.input_data,
+        )

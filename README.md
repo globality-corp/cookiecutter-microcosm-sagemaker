@@ -49,7 +49,7 @@ In the second shell,
     cd ml-papaya-extractor
     pyenv virtualenv 3.7.2 ml-papaya-extractor
     pyenv shell ml-papaya-extractor
-    pip install flake8 flake8-print flake8-logging-format flake8-isort flake8-quotes
+    pip install flake8 flake8-print flake8-logging-format flake8-isort flake8-quotes mypy
 
 ### Development
 During development, make all changes to the cookiecutter template, not to the

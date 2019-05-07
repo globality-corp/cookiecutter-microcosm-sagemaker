@@ -18,8 +18,14 @@ class TestExampleBundle:
         self.training_initializers = self.graph.training_initializers
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
-        self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
-        self.gold_output_artifact_path = get_fixture_path("example_gold_output_artifact")
+        self.input_artifact = (
+            InputArtifact(
+                get_fixture_path("example_input_artifact") / "example_bundle"
+            )
+        )
+        self.gold_output_artifact_path = (
+            get_fixture_path("example_gold_output_artifact") / "example_bundle"
+        )
 
     def check_bundle_prediction(self) -> None:
         assert_that(

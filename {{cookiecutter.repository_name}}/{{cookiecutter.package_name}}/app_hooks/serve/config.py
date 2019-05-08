@@ -28,10 +28,6 @@ def load_default_config(metadata: Metadata) -> Configuration:
         swagger_convention=dict(
             version="v1",
         ),
-        # We want our routes to come directly after the root /
-        build_route_path=dict(
-            prefix="",
-        ),
     )
 
     return config

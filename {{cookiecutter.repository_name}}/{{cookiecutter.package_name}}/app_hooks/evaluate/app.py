@@ -47,12 +47,6 @@ def create_app(
 
         # Sagemaker basics
         "sagemaker",
-
-        # Bundles
-        "example_bundle",
-
-        # Evaluations
-        "example_evaluation",
     )
 
     return graph.lock()

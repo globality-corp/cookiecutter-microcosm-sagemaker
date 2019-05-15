@@ -47,9 +47,6 @@ def create_app(
 
         # Sagemaker basics
         "sagemaker",
-
-        # Bundles
-        "example_bundle",
     )
     graph.use(*extra_deps)
 

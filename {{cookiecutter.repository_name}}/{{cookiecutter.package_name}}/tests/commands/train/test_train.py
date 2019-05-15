@@ -22,7 +22,7 @@ class TestTrainCli(TrainCliTestCase):
             matcher_constructor=construct_configuration_matcher,
         )
 
-        super().test_train(
+        self.run_and_check_train(
             input_data_path=get_fixture_path("example_input_data"),
             gold_output_artifact_path=get_fixture_path("example_gold_output_artifact"),
             output_artifact_matchers={

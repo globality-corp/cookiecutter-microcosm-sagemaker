@@ -49,9 +49,6 @@ def create_app(
 
         # Sagemaker basics
         "sagemaker",
-
-        # Bundles
-        "example_bundle",
     )
 
     if not model_only:

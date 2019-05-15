@@ -10,14 +10,12 @@ class TestExampleEvaluation:
         self.graph = create_app(extra_deps=["example_evaluation"])
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
-        self.input_artifact = (
+        input_artifact = (
             InputArtifact(
-                get_fixture_path("example_input_artifact") / "example_bundle"
+                get_fixture_path("example_input_artifact")
             )
         )
+        self.graph.load_active_bundle_and_dependencies(input_artifact)
 
     def test_evaluation(self) -> None:
-        bundle = self.graph.active_bundle
-        bundle.load(self.input_artifact)
-
-        self.graph.example_evaluation(bundle, self.input_data)
+        self.graph.example_evaluation(self.graph.active_bundle, self.input_data)

@@ -20,6 +20,19 @@ class ExampleBundle(Bundle):
 
         self.example_param = config.example_param
 
+    @property
+    def dependencies(self) -> List[Bundle]:
+        """
+        List of bundles upon which this bundle depends.  Whenever the `fit`,
+        `save` or `load` methods are called on this bundle, it is guaranteed
+        that the corresponding methods will have first been called all all
+        `dependency` bundles.
+
+        This example bundle has no dependencies.
+
+        """
+        return []
+
     def fit(self, input_data: InputData) -> None:
         """
         Perform training

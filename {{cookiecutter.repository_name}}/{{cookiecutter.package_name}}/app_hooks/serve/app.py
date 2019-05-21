@@ -9,6 +9,7 @@ from microcosm.config.model import Configuration
 from microcosm.loaders import load_each
 from microcosm.metadata import Metadata
 from microcosm.object_graph import ObjectGraph
+from microcosm_sagemaker.loaders import load_serve_conventions
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
@@ -34,6 +35,7 @@ def create_app(
 
     loader = load_each(
         load_default_config,
+        load_serve_conventions,
         *loaders,
     )
 

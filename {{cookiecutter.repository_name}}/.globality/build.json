@@ -10,11 +10,11 @@
         "name": "dev"
       }
     ],
-    "name": "{{ cookiecutter.package_name }}",
+    "name": "{{ cookiecutter.repository_name }}",
     "service_command": "serve",
     "service_port": 8080,
     "update_commands": [
-      "globality-build trigger-model-retraining --environment $ENVIRONMENT --image ${AWS_ECR_DOMAIN}/{{ cookiecutter.package_name }}:${CIRCLE_SHA1} --model-name {{ cookiecutter.package_name }} --configuration ./active.json"
+      "globality-build trigger-model-retraining --environment $ENVIRONMENT --image ${AWS_ECR_DOMAIN}/{{ cookiecutter.repository_name }}:${CIRCLE_SHA1} --model-name {{ cookiecutter.repository_name }} --configuration ./active.json"
     ]
   },
   "type": "python-service"

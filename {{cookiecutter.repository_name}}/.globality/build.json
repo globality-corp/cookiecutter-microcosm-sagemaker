@@ -11,6 +11,7 @@
       }
     ],
     "name": "{{ cookiecutter.repository_name }}",
+    "import-name": "{{ cookiecutter.package_name }}",
     "service_command": "serve",
     "service_port": 8080,
     "update_commands": [

@@ -16,23 +16,21 @@ from {{ cookiecutter.package_name }}.app_hooks.evaluate.config import load_defau
 
 
 Loader = Callable[[Metadata], Configuration]
+empty_loader = load_each()
 
 
 def create_app(
     debug: bool = False,
     testing: bool = False,
-    loaders: Optional[Iterable[Loader]] = None,
+    extra_loader: Loader = empty_loader,
 ) -> ObjectGraph:
     """
     Create the object graph for serving.
 
     """
-    if loaders is None:
-        loaders = []
-
     loader = load_each(
         load_default_config,
-        *loaders,
+        extra_loader,
     )
 
     graph = create_object_graph(

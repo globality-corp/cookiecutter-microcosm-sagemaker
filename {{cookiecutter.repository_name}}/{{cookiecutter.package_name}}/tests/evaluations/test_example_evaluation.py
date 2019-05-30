@@ -1,21 +1,14 @@
-from microcosm_sagemaker.artifact import InputArtifact
-from microcosm_sagemaker.input_data import InputData
+from microcosm_sagemaker.testing.evaluation import EvaluationTestCase
 
-from {{ cookiecutter.package_name }}.app_hooks.train.app import create_app
 from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
 
 
-class TestExampleEvaluation:
-    def setup(self) -> None:
-        self.graph = create_app(extra_deps=["example_evaluation"])
+class TestExampleEvaluation(EvaluationTestCase):
+    """
+    Loads the given artifact and runs the `example_evaluation` with the given
+    input data.
 
-        self.input_data = InputData(get_fixture_path("example_input_data"))
-
-        self.graph.load_active_bundle_and_dependencies(
-            InputArtifact(
-                get_fixture_path("example_input_artifact")
-            )
-        )
-
-    def test_evaluation(self) -> None:
-        self.graph.example_evaluation(self.graph.active_bundle, self.input_data)
+    """
+    evaluation_name = "example_evaluation"
+    root_input_artifact_path = get_fixture_path("example_input_artifact")
+    input_data_path = get_fixture_path("example_input_data")

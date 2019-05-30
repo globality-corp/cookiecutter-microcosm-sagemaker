@@ -2,7 +2,7 @@ from typing import List
 
 from microcosm.api import binding, defaults
 from microcosm_logging.decorators import logger
-from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
+from microcosm_sagemaker.artifact import BundleInputArtifact, BundleOutputArtifact
 from microcosm_sagemaker.bundle import Bundle
 from microcosm_sagemaker.input_data import InputData
 
@@ -68,7 +68,7 @@ class ExampleBundle(Bundle):
             ),
         ]
 
-    def save(self, output_artifact: OutputArtifact) -> None:
+    def save(self, output_artifact: BundleOutputArtifact) -> None:
         """
         Save the trained model
 
@@ -84,7 +84,7 @@ class ExampleBundle(Bundle):
         with open(output_artifact.path / "example.txt", "w") as output_file:
             output_file.write(str(self.example_trained_param))
 
-    def load(self, input_artifact: InputArtifact) -> None:
+    def load(self, input_artifact: BundleInputArtifact) -> None:
         """
         Load the trained model
 

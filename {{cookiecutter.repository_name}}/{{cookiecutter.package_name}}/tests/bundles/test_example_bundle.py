@@ -51,8 +51,10 @@ class TestExampleBundleFit(BundleFitTestCase, ExampleBundleTestCase):
 
 class TestExampleBundleSave(BundleSaveTestCase, ExampleBundleTestCase):
     """
-    We just need to provide the location of a gold output artifact that the
-    bundle will be checked against.
+    In this case the bundle and all its dependencies will be loaded, and then
+    the bundle under test will be saved.  We provide the location of a gold
+    bundle output artifact that the bundle's saved artifact will be checked
+    against.
 
     If necessary, `output_artifact_matchers` can be defined to customize the
     way files are compared between gold artifact and actual artifact.

@@ -2,7 +2,7 @@
 Create the application.
 
 """
-from typing import Callable, Iterable, Optional
+from typing import Callable
 
 from microcosm.api import create_object_graph
 from microcosm.config.model import Configuration

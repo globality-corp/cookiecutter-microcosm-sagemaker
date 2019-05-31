@@ -1,5 +1,4 @@
 from hamcrest import assert_that, contains, has_properties
-
 from microcosm_sagemaker.testing.bundle import (
     BundleFitTestCase,
     BundleLoadTestCase,

@@ -2,13 +2,13 @@
 Create the application.
 
 """
-from typing import Callable, Iterable, Optional
+from typing import Callable
 
 from microcosm.api import create_object_graph
 from microcosm.config.model import Configuration
-from microcosm.loaders import load_each, load_from_dict, load_from_environ
-from microcosm.object_graph import ObjectGraph
+from microcosm.loaders import load_each, load_from_environ
 from microcosm.metadata import Metadata
+from microcosm.object_graph import ObjectGraph
 from microcosm_sagemaker.loaders import load_train_conventions
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401

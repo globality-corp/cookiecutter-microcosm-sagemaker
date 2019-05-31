@@ -41,8 +41,9 @@ class ExampleBundleTestCase(BundleTestCase):
 
 class TestExampleBundleFit(BundleFitTestCase, ExampleBundleTestCase):
     """
-    We just need to provide the location of a dataset that we will fit and then
-    the fit bundle will be checked using the prediction checker above.
+    We just need to provide the location of a small test dataset.  This dataset
+    will be used to fit the bundle, and then the prediction will be tested
+    using the `check_bundle_prediction` function defined above.
 
     """
     input_data_path = get_fixture_path("example_input_data")
@@ -50,10 +51,10 @@ class TestExampleBundleFit(BundleFitTestCase, ExampleBundleTestCase):
 
 class TestExampleBundleSave(BundleSaveTestCase, ExampleBundleTestCase):
     """
-    In this case the bundle and all its dependencies will be loaded, and then
-    the bundle under test will be saved.  We provide the location of a gold
-    bundle output artifact that the bundle's saved artifact will be checked
-    against.
+    In this case the bundle and all its dependencies will first be loaded, and
+    then the bundle under test will be saved.  We only need to provide the
+    location of a gold bundle output artifact that the bundle's saved artifact
+    will be checked against.
 
     If necessary, `output_artifact_matchers` can be defined to customize the
     way files are compared between gold artifact and actual artifact.

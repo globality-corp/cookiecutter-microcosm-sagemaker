@@ -1,0 +1,34 @@
+version: 2
+
+jobs:
+
+  test-python-cookiecutter:
+    docker:
+      - image: circleci/python:3.6.2
+    steps:
+      - checkout
+      - run:
+          name: Install Pre-Dependencies
+          command: sudo pip install tox
+      - restore_cache:
+          key: v1-python-dependencies-{{ checksum "setup.py" }}
+      - run:
+          name: Run tests
+          command: tox
+      - save_cache:
+          key: v1-python-dependencies-{{ checksum "setup.py" }}
+          paths:
+            - .tox
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - \{\{cookiecutter.repo_name\}\}
+            - MANIFEST.in
+            - setup.py
+            - setup.cfg
+
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+      - test-python-cookiecutter

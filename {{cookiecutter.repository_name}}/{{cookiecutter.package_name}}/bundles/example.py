@@ -25,7 +25,7 @@ class ExampleBundle(Bundle):
         """
         List of bundles upon which this bundle depends.  Whenever the `fit`,
         `save` or `load` methods are called on this bundle, it is guaranteed
-        that the corresponding methods will have first been called all all
+        that the corresponding methods will have first been called on all
         `dependency` bundles.
 
         This example bundle has no dependencies.

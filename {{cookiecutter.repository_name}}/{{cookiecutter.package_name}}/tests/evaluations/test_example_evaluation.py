@@ -9,6 +9,13 @@ class TestExampleEvaluation(EvaluationTestCase):
     input data.
 
     """
+
+    # Indicates which evaluation we are testing.  This name will be used to
+    # access the evaluation from the dependency graph.
     evaluation_name = "example_evaluation"
+
+    # An input artifact that will be used to load a bundle to evaluate
     root_input_artifact_path = get_fixture_path("example_input_artifact")
+
+    # Data to use to test the evaluation
     input_data_path = get_fixture_path("example_input_data")

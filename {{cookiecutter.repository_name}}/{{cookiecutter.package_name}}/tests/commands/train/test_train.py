@@ -26,7 +26,7 @@ class TestTrainCli(TrainCliTestCase):
     input_data_path = get_fixture_path("example_input_data")
 
     # A gold directory that will be compared to the actual artifact output from
-    # running the test command
+    # running the train command
     gold_output_artifact_path = get_fixture_path("example_gold_output_artifact")
 
     # Define matchers that will be used to override how the gold directory

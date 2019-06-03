@@ -1,12 +1,12 @@
-from hamcrest import assert_that, contains, has_properties
+from hamcrest import contains, has_properties
 from microcosm_sagemaker.testing.bundle import (
     BundleFitTestCase,
     BundleLoadTestCase,
+    BundlePredictionCheck,
     BundleSaveTestCase,
     BundleTestCase,
 )
 
-from {{ cookiecutter.package_name }}.bundles.example import ExampleBundle
 from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
 
 
@@ -27,16 +27,20 @@ class ExampleBundleTestCase(BundleTestCase):
     # the bundle under test
     root_input_artifact_path = get_fixture_path("example_input_artifact")
 
-    # This function will be called on the bundle after fitting / loading to
-    # make sure it works correctly
-    def check_bundle_prediction(self, bundle: ExampleBundle) -> None:
-        assert_that(
-            bundle.predict(1.0),
-            contains(has_properties(
-                uri="http://example.com",
-                score=3.0,
-            )),
+    # After fit / load, the following sets of args / kwargs / return value
+    # matchers will be used to check that the bundle.predict member function
+    # works as expected.
+    bundle_prediction_checks = [
+        BundlePredictionCheck(
+            args=[1.0],
+            return_value_matcher=contains(
+                has_properties(
+                    uri="http://example.com",
+                    score=3.0,
+                ),
+            )
         )
+    ]
 
 
 class TestExampleBundleFit(BundleFitTestCase, ExampleBundleTestCase):

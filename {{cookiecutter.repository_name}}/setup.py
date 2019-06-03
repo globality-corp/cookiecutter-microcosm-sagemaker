@@ -18,7 +18,7 @@ setup(
     install_requires=[
         "click>=7.0",
         "microcosm-logging>=1.3.0",
-        "microcosm-sagemaker>=0.3.0",
+        "microcosm-sagemaker>=0.2.0",
         "microcosm-secretsmanager>=1.1.0",
         "microcosm>=2.4.1",
         "pyOpenSSL>=18.0.0",

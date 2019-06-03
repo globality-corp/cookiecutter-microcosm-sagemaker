@@ -10,5 +10,5 @@ class TestEvaluateCli(EvaluateCliTestCase):
     evaluation tests.
 
     """
-    input_data_path = get_fixture_path("example_input_data")
-    input_artifact_path = get_fixture_path("example_input_artifact")
+    input_data_path = get_fixture_path("input_data")
+    input_artifact_path = get_fixture_path("artifact")

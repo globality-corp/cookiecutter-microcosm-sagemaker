@@ -20,7 +20,7 @@ class TestInvocationsRoute(InvocationsRouteTestCase):
     """
     # Path to a trained artifact that will be loaded prior to invoking the
     # invocations route
-    root_input_artifact_path = get_fixture_path("example_input_artifact")
+    root_input_artifact_path = get_fixture_path("artifact")
 
     # Some request json to test the route with
     request_json = dict(exampleArg=1.0)

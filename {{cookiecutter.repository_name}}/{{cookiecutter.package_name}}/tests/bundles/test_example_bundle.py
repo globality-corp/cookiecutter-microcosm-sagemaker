@@ -25,7 +25,7 @@ class ExampleBundleTestCase(BundleTestCase):
     # Contains a full root input artifact that will be used to automatically
     # load all dependency bundles and, for the load test, to test loading of
     # the bundle under test
-    root_input_artifact_path = get_fixture_path("example_input_artifact")
+    root_input_artifact_path = get_fixture_path("artifact")
 
     # After fit / load, the following sets of args / kwargs / return value
     # matchers will be used to check that the bundle.predict member function
@@ -50,7 +50,7 @@ class TestExampleBundleFit(BundleFitTestCase, ExampleBundleTestCase):
     using the `check_bundle_prediction` function defined above.
 
     """
-    input_data_path = get_fixture_path("example_input_data")
+    input_data_path = get_fixture_path("input_data")
 
 
 class TestExampleBundleSave(BundleSaveTestCase, ExampleBundleTestCase):
@@ -65,7 +65,7 @@ class TestExampleBundleSave(BundleSaveTestCase, ExampleBundleTestCase):
 
     """
     gold_bundle_output_artifact_path = (
-        get_fixture_path("example_gold_output_artifact") / "example_bundle"
+        get_fixture_path("artifact") / "example_bundle"
     )
 
 

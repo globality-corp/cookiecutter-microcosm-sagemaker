@@ -15,7 +15,7 @@ class TestExampleEvaluation(EvaluationTestCase):
     evaluation_name = "example_evaluation"
 
     # An input artifact that will be used to load a bundle to evaluate
-    root_input_artifact_path = get_fixture_path("example_input_artifact")
+    root_input_artifact_path = get_fixture_path("artifact")
 
     # Data to use to test the evaluation
-    input_data_path = get_fixture_path("example_input_data")
+    input_data_path = get_fixture_path("input_data")

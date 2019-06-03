@@ -1,0 +1,7 @@
+{
+  "params": {
+    "name": "cookiecutter-microcosm-sagemaker"
+  },
+  "type": "python-service",
+  "version": "2019.20.1"
+}

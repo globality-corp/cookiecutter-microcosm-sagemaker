@@ -4,8 +4,11 @@ from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestEvaluateCli(EvaluateCliTestCase):
-    def test_evaluate(self) -> None:
-        super().test_evaluate(
-            input_data_path=get_fixture_path("example_input_data"),
-            input_artifact_path=get_fixture_path("example_input_artifact"),
-        )
+    """
+    Tests the evaluate cli.  This is an end-to-end test, so doesn't need to try
+    to explore all edge cases.  For more specific tests, it's better to write
+    evaluation tests.
+
+    """
+    input_data_path = get_fixture_path("input_data")
+    input_artifact_path = get_fixture_path("artifact")

@@ -2,7 +2,10 @@ from typing import List
 
 from microcosm.api import binding, defaults
 from microcosm_logging.decorators import logger
-from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
+from microcosm_sagemaker.artifact import (
+    BundleInputArtifact,
+    BundleOutputArtifact,
+)
 from microcosm_sagemaker.bundle import Bundle
 from microcosm_sagemaker.input_data import InputData
 
@@ -19,6 +22,19 @@ class ExampleBundle(Bundle):
         config = graph.config.example_bundle
 
         self.example_param = config.example_param
+
+    @property
+    def dependencies(self) -> List[Bundle]:
+        """
+        List of bundles upon which this bundle depends.  Whenever the `fit`,
+        `save` or `load` methods are called on this bundle, it is guaranteed
+        that the corresponding methods will have first been called on all
+        `dependency` bundles.
+
+        This example bundle has no dependencies.
+
+        """
+        return []
 
     def fit(self, input_data: InputData) -> None:
         """
@@ -55,7 +71,7 @@ class ExampleBundle(Bundle):
             ),
         ]
 
-    def save(self, output_artifact: OutputArtifact) -> None:
+    def save(self, output_artifact: BundleOutputArtifact) -> None:
         """
         Save the trained model
 
@@ -71,7 +87,7 @@ class ExampleBundle(Bundle):
         with open(output_artifact.path / "example.txt", "w") as output_file:
             output_file.write(str(self.example_trained_param))
 
-    def load(self, input_artifact: InputArtifact) -> None:
+    def load(self, input_artifact: BundleInputArtifact) -> None:
         """
         Load the trained model
 

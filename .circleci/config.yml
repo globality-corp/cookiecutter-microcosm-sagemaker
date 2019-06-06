@@ -69,11 +69,11 @@ jobs:
             . venv/bin/activate
             pip install -U pip
             pip install cookiecutter
-            ./scripts/instantiate.sh
-            (cd ml-papaya-extractor && globality-build build-gen local)
+            ./scripts/instantiate-circle.py
+            (cd cookiecutter-microcosm-sagemaker && globality-build build-gen local)
             eval $(aws ecr get-login --no-include-email)
-            globality-build docker-base --repo ml-papaya-extractor --base-dir ml-papaya-extractor
-            globality-build docker --repo ml-papaya-extractor --base-dir ml-papaya-extractor
+            globality-build docker-base --repo cookiecutter-microcosm-sagemaker --base-dir cookiecutter-microcosm-sagemaker
+            globality-build docker --repo cookiecutter-microcosm-sagemaker --base-dir cookiecutter-microcosm-sagemaker
 
   test:
     <<: *defaults

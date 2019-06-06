@@ -65,6 +65,9 @@ jobs:
           name: Build Base Docker
           # install dependencies for loading ecs task definitions
           command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -U pip
             pip install cookiecutter
             ./scripts/instantiate.sh
             eval $(aws ecr get-login --no-include-email)

@@ -14,7 +14,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:pokey-custom-root
+    - image: ${AWS_ECR_DOMAIN}/globality-build:1dc8ca9ec125de181fb9c13318d53634327c0e5d
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}

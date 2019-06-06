@@ -72,8 +72,8 @@ jobs:
             ./scripts/instantiate-circle.py
             (cd cookiecutter-microcosm-sagemaker && globality-build build-gen local)
             eval $(aws ecr get-login --no-include-email)
-            globality-build docker-base --repo cookiecutter-microcosm-sagemaker --base-dir cookiecutter-microcosm-sagemaker
-            globality-build docker --repo cookiecutter-microcosm-sagemaker --base-dir cookiecutter-microcosm-sagemaker
+            globality-build docker-base --repo python-library --base-dir cookiecutter-microcosm-sagemaker
+            globality-build docker --repo python-library --base-dir cookiecutter-microcosm-sagemaker
 
   test:
     <<: *defaults

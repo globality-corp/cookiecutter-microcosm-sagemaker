@@ -2,22 +2,15 @@
 Create the application.
 
 """
-from typing import Callable
-
 from microcosm.api import create_object_graph
-from microcosm.config.model import Configuration
-from microcosm.loaders import load_each, load_from_environ
-from microcosm.metadata import Metadata
+from microcosm.loaders import empty_loader, load_each, load_from_environ
 from microcosm.object_graph import ObjectGraph
+from microcosm.typing import Loader
 from microcosm_sagemaker.loaders import evaluate_conventions_loader
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
 from {{ cookiecutter.package_name }}.app_hooks.evaluate.config import load_default_config
-
-
-Loader = Callable[[Metadata], Configuration]
-empty_loader = load_each()
 
 
 def create_app(

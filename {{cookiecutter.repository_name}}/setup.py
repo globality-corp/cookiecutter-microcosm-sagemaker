@@ -20,7 +20,7 @@ setup(
         "microcosm-logging>=1.3.0",
         "microcosm-sagemaker>=0.4.0",
         "microcosm-secretsmanager>=1.1.0",
-        "microcosm>=2.4.1",
+        "microcosm>=2.8.0",
         "pyOpenSSL>=18.0.0",
     ],
     setup_requires=[

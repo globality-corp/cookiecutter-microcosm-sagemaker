@@ -48,6 +48,14 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Install Python deps in a venv
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -U pip
+            pip install cookiecutter
+
       - persist_to_workspace:
           root: ~/repo
           <<: *whitelist
@@ -65,10 +73,7 @@ jobs:
           name: Build Base Docker
           # install dependencies for loading ecs task definitions
           command: |
-            python3 -m venv venv
             . venv/bin/activate
-            pip install -U pip
-            pip install cookiecutter
             ./scripts/instantiate.sh
             (cd ml-papaya-extractor && globality-build build-gen local)
             eval $(aws ecr get-login --no-include-email)
@@ -86,10 +91,7 @@ jobs:
       - run:
           name: Test code
           command: |
-            python3 -m venv venv
             . venv/bin/activate
-            pip install -U pip
-            pip install cookiecutter
             ./scripts/instantiate.sh
             (cd ml-papaya-extractor && globality-build build-gen local)
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true
@@ -109,10 +111,7 @@ jobs:
       - run:
           name: Run Lint
           command: |
-            python3 -m venv venv
             . venv/bin/activate
-            pip install -U pip
-            pip install cookiecutter
             ./scripts/instantiate.sh
             (cd ml-papaya-extractor && globality-build build-gen local)
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true
@@ -133,10 +132,7 @@ jobs:
       - run:
           name: Run Typehinting
           command: |
-            python3 -m venv venv
             . venv/bin/activate
-            pip install -U pip
-            pip install cookiecutter
             ./scripts/instantiate.sh
             (cd ml-papaya-extractor && globality-build build-gen local)
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true

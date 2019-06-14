@@ -2,10 +2,7 @@ from typing import List
 
 from microcosm.api import binding, defaults
 from microcosm_logging.decorators import logger
-from microcosm_sagemaker.artifact import (
-    BundleInputArtifact,
-    BundleOutputArtifact,
-)
+from microcosm_sagemaker.artifact import BundleInputArtifact, BundleOutputArtifact
 from microcosm_sagemaker.bundle import Bundle
 from microcosm_sagemaker.input_data import InputData
 

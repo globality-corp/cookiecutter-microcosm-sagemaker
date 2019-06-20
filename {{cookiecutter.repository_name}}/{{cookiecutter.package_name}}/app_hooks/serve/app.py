@@ -2,22 +2,16 @@
 Create the application.
 
 """
-from typing import Callable
-
 from microcosm.api import create_object_graph
-from microcosm.config.model import Configuration
-from microcosm.loaders import load_each
-from microcosm.metadata import Metadata
+from microcosm.loaders import empty_loader, load_each, load_from_environ
 from microcosm.object_graph import ObjectGraph
+from microcosm.typing import Loader
+from microcosm_sagemaker.loaders import serve_conventions_loader
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
 import {{ cookiecutter.package_name }}.routes  # noqa: 401
 from {{ cookiecutter.package_name }}.app_hooks.serve.config import load_default_config
-
-
-Loader = Callable[[Metadata], Configuration]
-empty_loader = load_each()
 
 
 def create_app(
@@ -30,9 +24,12 @@ def create_app(
     Create the object graph for serving.
 
     """
-    loader = load_each(
-        load_default_config,
-        extra_loader,
+    loader = serve_conventions_loader(
+        initial_loader=load_each(
+            load_default_config,
+            load_from_environ,
+            extra_loader,
+        )
     )
 
     graph = create_object_graph(
@@ -47,6 +44,10 @@ def create_app(
 
         # Sagemaker basics
         "sagemaker",
+
+        # This line causes active bundle and its dependencies to automatically
+        # be loaded from the configured input artifact.
+        "load_active_bundle_and_dependencies",
     )
 
     if not model_only:

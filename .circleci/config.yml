@@ -14,7 +14,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:fe815e7fe622e84fba3ea7c6f72299c4a052f414
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2019.24.30
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -26,7 +26,7 @@ defaults: &defaults
 deploy_defaults: &deploy_defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:fe815e7fe622e84fba3ea7c6f72299c4a052f414
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2019.24.30
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}

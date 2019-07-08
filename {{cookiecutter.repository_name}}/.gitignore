@@ -104,3 +104,5 @@ build.{{ cookiecutter.package_name }}/docker-base/*
 {{ cookiecutter.package_name }}.conf
 
 .mypy_cache
+
+/coverage/

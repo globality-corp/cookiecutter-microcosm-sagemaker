@@ -52,11 +52,16 @@ def create_app(
 
     if not model_only:
         graph.use(
-            # SageMaker conventions
-            "ping_convention",
+            # API Conventions
+            "discovery_convention",
+            "health_convention",
+            "landing_convention",
+            "config_convention",
 
             # Routes
             "invocations_route",
+
+            "v1_swagger_convention",
         )
 
     return graph.lock()

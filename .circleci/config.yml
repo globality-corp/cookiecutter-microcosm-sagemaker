@@ -67,8 +67,17 @@ jobs:
           name: Build Base Docker
           # install dependencies for loading ecs task definitions
           command: |
+<<<<<<< HEAD
             eval $(aws ecr get-login --no-include-email)
             globality-build docker-build-push --repo cookiecutter-microcosm-sagemaker
+=======
+            . venv/bin/activate
+            ./scripts/instantiate.sh
+            (cd papaya-extractor && globality-build build-gen local)
+            eval $(aws ecr get-login --no-include-email)
+            globality-build docker-base --repo ml-papaya-extractor --base-dir papaya-extractor
+            globality-build docker --repo ml-papaya-extractor --base-dir papaya-extractor
+>>>>>>> 242537d... Fix circle
 
   test:
     <<: *defaults
@@ -81,8 +90,16 @@ jobs:
       - run:
           name: Test code
           command: |
+<<<<<<< HEAD
             docker create -v /src/cookiecutter_microcosm_sagemaker/tests/ --name service_tests alpine:3.4 /bin/true
             docker cp $(pwd)/cookiecutter_microcosm_sagemaker/tests service_tests:/src/cookiecutter_microcosm_sagemaker/
+=======
+            . venv/bin/activate
+            ./scripts/instantiate.sh
+            (cd papaya-extractor && globality-build build-gen local)
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true
+            docker cp $(pwd)/papaya-extractor/papaya_extractor/tests service_tests:/src/papaya_extractor/
+>>>>>>> 242537d... Fix circle
             eval $(aws ecr get-login --no-include-email)
             docker pull ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1}
             docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1} test
@@ -98,8 +115,16 @@ jobs:
       - run:
           name: Run Lint
           command: |
+<<<<<<< HEAD
             docker create -v /src/cookiecutter_microcosm_sagemaker/tests/ --name service_tests alpine:3.4 /bin/true
             docker cp $(pwd)/cookiecutter_microcosm_sagemaker/tests service_tests:/src/cookiecutter_microcosm_sagemaker/
+=======
+            . venv/bin/activate
+            ./scripts/instantiate.sh
+            (cd papaya-extractor && globality-build build-gen local)
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true
+            docker cp $(pwd)/papaya-extractor/papaya_extractor/tests service_tests:/src/papaya_extractor/
+>>>>>>> 242537d... Fix circle
             eval $(aws ecr get-login --no-include-email)
             docker pull ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1}
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1} lint
@@ -116,8 +141,16 @@ jobs:
       - run:
           name: Run Typehinting
           command: |
+<<<<<<< HEAD
             docker create -v /src/cookiecutter_microcosm_sagemaker/tests/ --name service_tests alpine:3.4 /bin/true
             docker cp $(pwd)/cookiecutter_microcosm_sagemaker/tests service_tests:/src/cookiecutter_microcosm_sagemaker/
+=======
+            . venv/bin/activate
+            ./scripts/instantiate.sh
+            (cd papaya-extractor && globality-build build-gen local)
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.4 /bin/true
+            docker cp $(pwd)/papaya-extractor/papaya_extractor/tests service_tests:/src/papaya_extractor/
+>>>>>>> 242537d... Fix circle
             eval $(aws ecr get-login --no-include-email)
             docker pull ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1}
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/cookiecutter-microcosm-sagemaker:${CIRCLE_SHA1} typehinting

@@ -3,5 +3,5 @@
     "name": "cookiecutter-microcosm-sagemaker"
   },
   "type": "python-service",
-  "version": "2019.42.0"
+  "version": "2019.42.1"
 }

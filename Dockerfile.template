@@ -20,7 +20,7 @@ FROM <REPO>/cookiecutter-microcosm-sagemaker:base-<SHA1>
 # to customize the `dev` and `test` targets.
 
 ENV NAME cookiecutter_microcosm_sagemaker
-COPY README.md entrypoint.sh rds_dump_to_s3.sh /src/
+COPY README.md entrypoint.sh /src/
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["uwsgi"]
 EXPOSE 80

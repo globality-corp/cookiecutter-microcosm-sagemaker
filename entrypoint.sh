@@ -35,7 +35,7 @@ elif [ "$1" = "test" ]; then
     # Install standard test dependencies; YMMV
     pip --quiet install \
         --extra-index-url $EXTRA_INDEX_URL \
-        .[test] nose PyHamcrest coverage
+        .[test] nose "PyHamcrest<1.10.0" coverage
     exec nosetests ${NAME}
 elif [ "$1" = "lint" ]; then
     # Install standard linting dependencies; YMMV
@@ -47,8 +47,6 @@ elif [ "$1" = "typehinting" ]; then
     # Install standard type-linting dependencies
     pip --quiet install mypy
     exec mypy ${NAME} --ignore-missing-imports
-elif [ "$1" = "rdsdump2s3" ]; then
-    sh ./rds_dump_to_s3.sh 
 else
     exec "$@"
 fi

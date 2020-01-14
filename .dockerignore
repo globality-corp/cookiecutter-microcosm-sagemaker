@@ -3,7 +3,6 @@
 cookiecutter_microcosm_sagemaker/tests
 !dist/*-none-any.whl
 !entrypoint.sh
-!rds_dump_to_s3.sh
 !MANIFEST.in
 !README.md
 !requirements.txt
@@ -11,4 +10,3 @@ cookiecutter_microcosm_sagemaker/tests
 !setup.cfg
 **/*.pyc
 **/*~
-

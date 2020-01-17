@@ -14,7 +14,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.2.10
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.2.110
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -26,7 +26,7 @@ defaults: &defaults
 deploy_defaults: &deploy_defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.2.10
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.2.110
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -52,21 +52,21 @@ jobs:
           root: ~/repo
           <<: *whitelist
 
-  build_base_docker:
+  build_docker:
     <<: *defaults
 
     steps:
       - attach_workspace:
           at: ~/repo
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
 
       - run:
           name: Build Base Docker
           # install dependencies for loading ecs task definitions
           command: |
             eval $(aws ecr get-login --no-include-email)
-            globality-build build-gen local
             globality-build docker-build-push --repo cookiecutter-microcosm-sagemaker
 
   test:
@@ -234,7 +234,7 @@ workflows:
             # run for all branches and tags
             tags:
               only: /.*/
-      - build_base_docker:
+      - build_docker:
           requires:
             - checkout
           filters:
@@ -243,21 +243,21 @@ workflows:
               only: /.*/
       - test:
           requires:
-            - build_base_docker
+            - build_docker
           filters:
             # run for all branches and tags
             tags:
               only: /.*/
       - lint:
           requires:
-            - build_base_docker
+            - build_docker
           filters:
             # run for all branches and tags
             tags:
               only: /.*/
       - typehinting:
           requires:
-            - build_base_docker
+            - build_docker
           filters:
             # run for all branches and tags
             tags:

@@ -25,6 +25,10 @@ and the claws that catch._
 ##### Checklist
 
 * [ ] Functionality has been tested end-to-end in a local environment.
+* [ ] Functionality has been tested end-to-end in a devN environment.
+* [ ] QA and Product signed off on this change and approve of it moving forward
+* [ ] Automation passed
+* [ ] My schema migration is following the guidelines: [Schema migrations policies](https://globality.atlassian.net/wiki/spaces/D/pages/1020761227/Schema+Migrations)
 * [ ] All changes are covered by automated tests including edge cases.
 * [ ] API is backwards-compatible for upstream and downstream services.
 * [ ] Relevant documentation (including comments) has been added or updated.
@@ -36,6 +40,7 @@ and the claws that catch._
 <!-- Add / remove links as appropriate -->
 
 * [Code review guidelines](https://globality.atlassian.net/wiki/spaces/DEV/pages/933758735/How+to+do+a+great+code+review)
+* [Schema migrations policies](https://globality.atlassian.net/wiki/spaces/D/pages/1020761227/Schema+Migrations)
 * Link to PRs in other services
 * Link to Sentry error
 * Link to other reference

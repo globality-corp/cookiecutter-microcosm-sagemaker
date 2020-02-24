@@ -47,6 +47,23 @@ elif [ "$1" = "typehinting" ]; then
     # Install standard type-linting dependencies
     pip --quiet install mypy
     exec mypy ${NAME} --ignore-missing-imports
+elif [ "$1" = "test-artifact" ]; then
+    echo "starting test-artifact..."
+    pip install awscli
+    echo "starting to copy model..."
+    echo $MODEL_LOCATION
+    aws s3 cp ${MODEL_LOCATION} .
+    mkdir -p /opt/ml/model
+    tar -zxf model.tar.gz -C /opt/ml/model
+    mkdir -p /opt/ml/input/data/test
+    echo "starting to sync test dataset..."
+    echo $TEST_DATASET_LOCATION
+    aws s3 cp --recursive ${TEST_DATASET_LOCATION} /opt/ml/input/data/test
+    # Install standard test dependencies; YMMV
+    pip --quiet install \
+        --extra-index-url $EXTRA_INDEX_URL \
+        .[test] nose PyHamcrest coverage
+    exec nosetests ${NAME} --attr 'requires_artifact'
 else
     exec "$@"
 fi

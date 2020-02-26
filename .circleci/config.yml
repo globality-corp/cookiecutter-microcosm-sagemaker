@@ -14,7 +14,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.8.20
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.8.60
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -26,7 +26,7 @@ defaults: &defaults
 deploy_defaults: &deploy_defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.8.20
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.8.60
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -143,17 +143,17 @@ jobs:
                 --tag ${CIRCLE_BRANCH//\//-}
             globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
 
-  deploy_prod:
+  deploy_demo:
     <<: *deploy_defaults
     steps:
       - attach_workspace:
           at: ~/repo
       - setup_remote_docker
       - run:
-          name: Deploy prod
+          name: Deploy demo
           command: |
-            export CLUSTER="service-prod"
-            export ENVIRONMENT=prod
+            export CLUSTER="service-demo"
+            export ENVIRONMENT=demo
             if [ -z "$ENVIRONMENT" ]
             then
                 exit 0
@@ -165,12 +165,12 @@ jobs:
                 --tag master
             globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
 
-  backup_ecr_prod:
+  backup_ecr_demo:
     <<: *deploy_defaults
     steps:
       - setup_remote_docker
       - run:
-          name: Backup ECR prod
+          name: Backup ECR demo
           command: |
             DESTINATION_REGION=us-west-2
             eval $(aws ecr get-login --no-include-email)
@@ -180,28 +180,6 @@ jobs:
                 --tag master \
                 --destination-region $DESTINATION_REGION \
                 --no-dry-run
-  deploy_test:
-    <<: *deploy_defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - setup_remote_docker
-      - run:
-          name: Deploy test
-          command: |
-            export CLUSTER="service-test"
-            export ENVIRONMENT=test
-            if [ -z "$ENVIRONMENT" ]
-            then
-                exit 0
-            fi
-            export NAME=cookiecutter-microcosm-sagemaker
-            globality-build docker-tag \
-                --service cookiecutter-microcosm-sagemaker \
-                --sha ${CIRCLE_SHA1} \
-                --tag ${CIRCLE_BRANCH//\//-}
-            globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
-
 
 
 workflows:
@@ -251,7 +229,7 @@ workflows:
             branches:
               only: /.*/
 
-      - deploy_prod:
+      - deploy_demo:
           requires:
             - test
             - lint
@@ -260,20 +238,11 @@ workflows:
             branches:
               only: master
 
-      - backup_ecr_prod:
+      - backup_ecr_demo:
           requires:
-            - deploy_prod
+            - deploy_demo
           filters:
             branches:
               only: master
-
-      - deploy_test:
-          requires:
-            - test
-            - lint
-            - typehinting
-          filters:
-            branches:
-              only: /release\/2[0-9]{3}\.[0-5]?[0-9]\.[0-9]{1,3}$/
 
 

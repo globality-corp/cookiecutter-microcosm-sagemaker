@@ -2,7 +2,7 @@ from microcosm.api import binding
 from microcosm_flask.conventions.base import EndpointDefinition
 from microcosm_sagemaker.conventions.invocations import configure_invocations
 
-from {{ cookiecutter.package_name }}.resources.invocations_resources import (
+from {{cookiecutter.package_name}}.resources.invocations_resources import (
     ClassificationResultSchema,
     NewPredictionSchema,
 )

@@ -1,6 +1,6 @@
 from microcosm_sagemaker.testing.evaluation import EvaluationTestCase
 
-from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
+from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestExampleEvaluation(EvaluationTestCase):

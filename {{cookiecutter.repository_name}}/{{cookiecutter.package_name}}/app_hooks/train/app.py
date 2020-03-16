@@ -10,7 +10,9 @@ from microcosm_sagemaker.loaders import train_conventions_loader
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
-from {{ cookiecutter.package_name }}.app_hooks.train.config import load_default_config
+from {{cookiecutter.package_name}}.app_hooks.train.config import (
+    load_default_config,
+)
 
 
 def create_app(

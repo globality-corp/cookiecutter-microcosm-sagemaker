@@ -12,24 +12,15 @@ from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestInvocationsRoute(InvocationsRouteTestCase):
-    def setup(self) -> None:
-        super().setup(
-            input_artifact_path=get_fixture_path("example_input_artifact")
-        )
+    root_input_artifact_path=get_fixture_path("example_input_artifact")
 
-    def test_search(self) -> None:
-        request_json = dict(
-            exampleArg=1.0,
-        )
+    request_json = dict(
+        exampleArg=1.0,
+    )
 
-        response_items_matcher = contains(
+    response_items_matcher = contains(
             has_entries(
                 uri="http://example.com",
                 score=3.0,
             ),
-        )
-
-        super().test_search(
-            request_json=request_json,
-            response_items_matcher=response_items_matcher,
         )

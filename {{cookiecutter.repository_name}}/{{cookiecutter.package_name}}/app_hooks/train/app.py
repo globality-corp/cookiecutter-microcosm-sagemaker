@@ -36,7 +36,7 @@ def create_app(
         name=__name__.split(".")[0],
         debug=debug,
         testing=testing,
-        loader=config_loader,
+        loader=loader,
     )
 
     graph.use(
@@ -48,6 +48,5 @@ def create_app(
         # Bundles
         "example_bundle",
     )
-    graph.use(*extra_deps)
 
     return graph.lock()

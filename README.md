@@ -60,11 +60,8 @@ the first shell, run
 
 Then in the second shell, to run unit tests, run
 
-    cd .. && cd ml-papaya-extractor && pip install -e . && python setup.py nosetests
-
-The initial `cd` commands are because the `instantiate` step above clobbers the
-`ml-papaya-extractor` directory.
+    cd ml-papaya-extractor && pip install -e . && python setup.py nosetests
 
 Similarly, to run linting, run
 
-    cd .. && cd ml-papaya-extractor && flake8 .
+    cd ml-papaya-extractor && flake8 .

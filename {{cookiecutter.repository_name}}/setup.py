@@ -25,6 +25,7 @@ setup(
     ],
     setup_requires=[
         "nose>=1.3.7",
+        "pyhamcrest>=2.0.2",
     ],
     entry_points={
         "microcosm_sagemaker.app_hooks": [

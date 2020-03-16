@@ -20,6 +20,14 @@ class ExampleBundle(Bundle):
 
         self.example_param = config.example_param
 
+    @property
+    def dependencies(self) -> List[Bundle]:
+        """
+        Dependent bundles to train and load before this bundle is trained.
+
+        """
+        return []
+
     def fit(self, input_data: InputData) -> None:
         """
         Perform training

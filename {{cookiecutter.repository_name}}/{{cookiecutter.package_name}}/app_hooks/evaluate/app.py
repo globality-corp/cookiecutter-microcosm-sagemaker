@@ -6,9 +6,10 @@ from typing import Callable, Iterable, Optional
 
 from microcosm.api import create_object_graph
 from microcosm.config.model import Configuration
-from microcosm.loaders import load_each
+from microcosm.loaders import empty_loader, load_each, load_from_environ
 from microcosm.metadata import Metadata
 from microcosm.object_graph import ObjectGraph
+from microcosm_sagemaker.loaders import evaluate_conventions_loader
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
@@ -19,20 +20,21 @@ Loader = Callable[[Metadata], Configuration]
 
 
 def create_app(
-    debug: bool = False,
-    testing: bool = False,
-    loaders: Optional[Iterable[Loader]] = None,
+    debug=False,
+    testing=False,
+    model_only=False,
+    extra_loader=empty_loader,
 ) -> ObjectGraph:
     """
-    Create the object graph for serving.
-
+    Create the object graph for evaluation.
     """
-    if loaders is None:
-        loaders = []
 
-    loader = load_each(
-        load_default_config,
-        *loaders,
+    loader = evaluate_conventions_loader(
+        initial_loader=load_each(
+            load_default_config,
+            load_from_environ,
+            extra_loader,
+        )
     )
 
     graph = create_object_graph(

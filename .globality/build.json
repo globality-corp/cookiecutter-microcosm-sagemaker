@@ -3,5 +3,9 @@
     "name": "cookiecutter-microcosm-sagemaker"
   },
   "type": "python-service",
+<<<<<<< HEAD
   "version": "2020.8.20"
+=======
+  "version": "2020.10.3"
+>>>>>>> 6d5e446... update globality build
 }

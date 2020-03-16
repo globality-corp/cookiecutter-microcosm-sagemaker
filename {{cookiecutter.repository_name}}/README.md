@@ -5,7 +5,8 @@
 
 ## Developing
 
-To setup the project for local development, make sure you have a virtualenv setup, and then run:
+To setup the project for local development, make sure you have a virtualenv
+setup, and then run:
 
     pip install -e .
 
@@ -30,9 +31,10 @@ This will install all the dependencies and set the project up for local usage.
 
 ## Training
 
-To train on a dataset locally, run
+To train on a dataset locally, run something like the following:
 
-    train
+    train --input-data {{ cookiecutter.package_name }}/tests/fixtures/input_data \
+          --output-artifact models/test
 
 To see supported arguments, run
 
@@ -44,16 +46,29 @@ CLI.
 
 ## Flask
 
-To run the Flask web server when developing locally, invoke the following:
+To run the Flask web server when developing locally, invoke something like the
+following:
 
-    runserver
+    runserver --input-artifact models/test
 
-The service publishes two endpoints, as expected by SageMaker:
+The service publishes several endpoints by default.
 
- -  The service supports SageMaker's ping endpoint:
+ -  The service supports invocations, which are the supported way of doing
+    inference:
 
-        GET /ping
+        POST /api/v1/invocations
 
- -  The service supports invocations:
+ -  The service publishes its own health:
 
-        POST /invocations
+        GET /api/health
+
+ -  The service publishes a [crawlable](https://en.wikipedia.org/wiki/HATEOAS)
+    endpoint for discovery of its operations:
+
+        GET /api/
+
+ -  The service publishes [Swagger](http://swagger.io/) definitions for its
+    operations (by API version) using
+    [HAL JSON](http://stateless.co/hal_specification.html):
+
+        GET /api/v1/swagger

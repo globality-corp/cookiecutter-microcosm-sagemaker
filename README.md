@@ -46,9 +46,9 @@ the top level of this cookiecutter repo.  Run
 
 In the second shell,
 
-    cd ml-papaya-extractor
-    pyenv virtualenv 3.7.2 ml-papaya-extractor
-    pyenv shell ml-papaya-extractor
+    cd papaya-extractor
+    pyenv virtualenv 3.7.2 papaya-extractor
+    pyenv shell papaya-extractor
     pip install flake8 flake8-print flake8-logging-format flake8-isort flake-quotes
 
 ### Development
@@ -60,8 +60,8 @@ the first shell, run
 
 Then in the second shell, to run unit tests, run
 
-    cd ml-papaya-extractor && pip install -e . && python setup.py nosetests
+    cd papaya-extractor && pip install -e . && python setup.py nosetests
 
 Similarly, to run linting, run
 
-    cd ml-papaya-extractor && flake8 .
+    cd papaya-extractor && flake8 .

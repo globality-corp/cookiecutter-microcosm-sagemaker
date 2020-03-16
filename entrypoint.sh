@@ -36,9 +36,6 @@ elif [ "$1" = "test" ]; then
     pip --quiet install \
         --extra-index-url $EXTRA_INDEX_URL \
         .[test] nose "PyHamcrest<1.10.0" coverage
-<<<<<<< HEAD
-    exec nosetests ${NAME}
-=======
     exec nosetests ${NAME} --exclude api_contract_test
 elif [ "$1" = "api-contract-test" ]; then
     pip --quiet install \
@@ -50,7 +47,6 @@ elif [ "$1" = "api-contract-test" ]; then
     else
         echo "No API contract tests to run"
     fi
->>>>>>> 6d5e446... update globality build
 elif [ "$1" = "lint" ]; then
     # Install standard linting dependencies; YMMV
     pip --quiet install \

@@ -2,14 +2,14 @@ import tempfile
 from pathlib import Path
 
 from hamcrest import assert_that, contains, has_properties
-from microcosm_sagemaker.artifact import InputArtifact, OutputArtifact
+from microcosm_sagemaker.artifact import RootInputArtifact, RootOutputArtifact
 from microcosm_sagemaker.input_data import InputData
 from microcosm_sagemaker.testing.directory_comparison import (
     directory_comparison,
 )
 
-from {{ cookiecutter.package_name }}.app_hooks.train.app import create_app
-from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
+from {{cookiecutter.package_name}}.app_hooks.train.app import create_app
+from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestExampleBundle:
@@ -18,7 +18,7 @@ class TestExampleBundle:
         self.training_initializers = self.graph.training_initializers
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
-        self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
+        self.input_artifact = RootInputArtifact(get_fixture_path("example_input_artifact"))
         self.gold_output_artifact_path = get_fixture_path("example_gold_output_artifact")
 
     def check_bundle_prediction(self) -> None:
@@ -36,16 +36,19 @@ class TestExampleBundle:
         self.check_bundle_prediction()
 
     def test_load(self) -> None:
-        self.graph.example_bundle.load(self.input_artifact)
+        self.graph.example_bundle.load(self.input_artifact / "example_bundle")
         self.check_bundle_prediction()
 
     def test_save(self) -> None:
-        self.graph.example_bundle.load(self.input_artifact)
+        self.graph.example_bundle.load(self.input_artifact / "example_bundle")
 
         with tempfile.TemporaryDirectory() as output_artifact_path:
-            output_artifact = OutputArtifact(output_artifact_path)
+            output_artifact = RootOutputArtifact(output_artifact_path)
+            output_bundle_path = output_artifact / "example_bundle"
 
-            self.graph.example_bundle.save(output_artifact)
+            output_bundle_path.path.mkdir()
+
+            self.graph.example_bundle.save(output_bundle_path)
 
             directory_comparison(
                 gold_dir=self.gold_output_artifact_path,

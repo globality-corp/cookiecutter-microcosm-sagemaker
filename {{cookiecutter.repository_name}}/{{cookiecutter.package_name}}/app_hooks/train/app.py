@@ -9,9 +9,11 @@ from microcosm.loaders import empty_loader, load_each, load_from_environ
 from microcosm.object_graph import ObjectGraph
 from microcosm_sagemaker.loaders import train_conventions_loader
 
-import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
-from {{ cookiecutter.package_name }}.app_hooks.train.config import load_default_config
+import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
+from {{cookiecutter.package_name}}.app_hooks.train.config import (
+    load_default_config,
+)
 
 
 def create_app(

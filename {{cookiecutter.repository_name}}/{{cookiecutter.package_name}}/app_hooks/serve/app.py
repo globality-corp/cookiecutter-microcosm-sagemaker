@@ -11,12 +11,16 @@ from microcosm.loaders.compose import load_config_and_secrets
 from microcosm.metadata import Metadata
 from microcosm.object_graph import ObjectGraph
 from microcosm_sagemaker.loaders import serve_conventions_loader
-from microcosm_secretsmanager.loaders.conventions import load_from_secretsmanager
+from microcosm_secretsmanager.loaders.conventions import (
+    load_from_secretsmanager,
+)
 
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
 import {{ cookiecutter.package_name }}.routes  # noqa: 401
-from {{ cookiecutter.package_name }}.app_hooks.serve.config import load_default_config
+from {{cookiecutter.package_name}}.app_hooks.serve.config import (
+    load_default_config,
+)
 
 
 Loader = Callable[[Metadata], Configuration]

@@ -1,8 +1,8 @@
-from microcosm_sagemaker.artifact import InputArtifact
+from microcosm_sagemaker.artifact import RootInputArtifact
 from microcosm_sagemaker.input_data import InputData
 
-from {{ cookiecutter.package_name }}.app_hooks.train.app import create_app
-from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
+from {{cookiecutter.package_name}}.app_hooks.train.app import create_app
+from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class TestExampleEvaluation:
@@ -10,10 +10,10 @@ class TestExampleEvaluation:
         self.graph = create_app()
 
         self.input_data = InputData(get_fixture_path("example_input_data"))
-        self.input_artifact = InputArtifact(get_fixture_path("example_input_artifact"))
+        self.input_artifact = RootInputArtifact(get_fixture_path("example_input_artifact"))
 
     def test_evaluation(self) -> None:
         bundle = self.graph.active_bundle
-        bundle.load(self.input_artifact)
+        bundle.load(self.input_artifact / "example_bundle")
 
         self.graph.example_evaluation(bundle, self.input_data)

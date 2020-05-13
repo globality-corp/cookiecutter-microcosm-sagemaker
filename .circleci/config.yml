@@ -70,7 +70,7 @@ jobs:
             eval $(aws ecr get-login --no-include-email)
             pip install cookiecutter
             ./scripts/instantiate.sh
-            (cd papaya-extractor && globality-build build-gen local)
+            cd papaya-extractor && globality-build build-gen local
             # Build on local machine - set the following env vars.
             # Some env vars are constants, so you can set them in your .bashrc
 

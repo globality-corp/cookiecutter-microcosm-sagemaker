@@ -4,7 +4,7 @@
     "pre_docker_build": [
       "pip install cookiecutter",
       "./scripts/instantiate.sh",
-      "(cd papaya-extractor && globality-build build-gen local)"
+      "cd papaya-extractor && globality-build build-gen local"
     ]
   },
   "type": "python-library",

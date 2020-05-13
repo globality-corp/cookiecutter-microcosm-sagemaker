@@ -1,11 +1,28 @@
 {
   "params": {
-    "name": "papaya-extractor",
-    "pre_docker_build": [
-      "pip install cookiecutter",
-      "./scripts/instantiate.sh",
-      "cd papaya-extractor && globality-build build-gen local"
-    ]
+    "circle_bootstrap": {
+      "docker_build": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ],
+      "lint": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ],
+      "test": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ],
+      "typehinting": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ]
+    },
+    "name": "papaya-extractor"
   },
   "type": "python-library",
   "version": "2020.19.20"

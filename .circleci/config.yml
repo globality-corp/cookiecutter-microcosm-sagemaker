@@ -68,6 +68,7 @@ jobs:
           # install dependencies for loading ecs task definitions
           command: |
             eval $(aws ecr get-login --no-include-email)
+            pip install cookiecutter
             ./scripts/instantiate.sh
             (cd ml-papaya-extractor && globality-build build-gen local)
             # Build on local machine - set the following env vars.

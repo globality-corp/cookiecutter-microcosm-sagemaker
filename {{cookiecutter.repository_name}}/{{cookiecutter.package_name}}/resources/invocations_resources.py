@@ -1,6 +1,5 @@
-from microcosm_flask.paging import PageSchema
-
 from marshmallow import Schema, fields
+from microcosm_flask.paging import PageSchema
 
 
 class ClassificationResultSchema(Schema):

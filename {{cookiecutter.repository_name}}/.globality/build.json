@@ -22,7 +22,7 @@
     "import-name": "{{ cookiecutter.package_name }}",
     "service_command": "uwsgi",
     "isort": {
-      "known_third_party": ["microcosm_logging", "microcosm_flask"]
+      "known_third_party": ["microcosm_logging", "microcosm_flask", "marshmallow"]
     },
     "service_port": 80,
     "update_commands": [

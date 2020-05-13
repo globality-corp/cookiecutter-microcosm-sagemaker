@@ -1,2 +1,6 @@
 # Used for instantiating the template during local cookiecutter development and testing
 /papaya-extractor
+
+# Don't include the top-level dockerfile if it were built accidentally
+/Dockerfile
+/entrypoint.sh

@@ -1,6 +1,6 @@
 *
-!cookiecutter_microcosm_sagemaker
-cookiecutter_microcosm_sagemaker/tests
+!papaya_extractor
+papaya_extractor/tests
 !dist/*-none-any.whl
 !entrypoint.sh
 !MANIFEST.in
@@ -10,3 +10,4 @@ cookiecutter_microcosm_sagemaker/tests
 !setup.cfg
 **/*.pyc
 **/*~
+

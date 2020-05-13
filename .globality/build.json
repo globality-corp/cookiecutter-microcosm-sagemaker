@@ -1,7 +1,11 @@
 {
   "params": {
-    "name": "cookiecutter-microcosm-sagemaker"
+    "name": "papaya-extractor",
+    "pre_docker_build": [
+      "./scripts/instantiate.sh",
+      "(cd ml-papaya-extractor && globality-build build-gen local)"
+    ]
   },
   "type": "python-library",
-  "version": "2020.10.3"
+  "version": "2020.19.20"
 }

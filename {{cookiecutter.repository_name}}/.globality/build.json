@@ -21,6 +21,9 @@
     "name": "{{ cookiecutter.repository_name }}",
     "import-name": "{{ cookiecutter.package_name }}",
     "service_command": "uwsgi",
+    "isort": {
+      "known_third_party": ["microcosm_logging", "microcosm_flask"]
+    },
     "service_port": 80,
     "update_commands": [
       "globality-build trigger-model-retraining --environment $ENVIRONMENT --image ${AWS_ECR_DOMAIN}/{{ cookiecutter.repository_name }}:${CIRCLE_SHA1} --model-name {{ cookiecutter.repository_name }} --configuration ./active.json"

@@ -11,9 +11,7 @@ from microcosm_sagemaker.loaders import serve_conventions_loader
 import {{ cookiecutter.package_name }}.bundles  # noqa: 401
 import {{ cookiecutter.package_name }}.evaluations  # noqa: 401
 import {{ cookiecutter.package_name }}.routes  # noqa: 401
-from {{cookiecutter.package_name}}.app_hooks.serve.config import (
-    load_default_config,
-)
+from {{cookiecutter.package_name}}.app_hooks.serve.config import load_default_config
 
 
 def create_app(

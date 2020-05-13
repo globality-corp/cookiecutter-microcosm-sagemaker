@@ -9,9 +9,7 @@ from microcosm_sagemaker.artifact import (
 from microcosm_sagemaker.bundle import Bundle
 from microcosm_sagemaker.input_data import InputData
 
-from {{cookiecutter.package_name}}.data_models.example_prediction import (
-    ExamplePrediction,
-)
+from {{cookiecutter.package_name}}.data_models.example_prediction import ExamplePrediction
 
 
 @binding("example_bundle")

@@ -2,9 +2,9 @@
   "params": {
     "name": "papaya-extractor",
     "pre_docker_build": [
-      "pip install cookiecutter",
+      "pip install cookiecutter globality-build",
       "./scripts/instantiate.sh",
-      "(cd ml-papaya-extractor && globality-build build-gen local)"
+      "(cd papaya-extractor && globality-build build-gen local)"
     ]
   },
   "type": "python-library",

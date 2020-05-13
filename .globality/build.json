@@ -2,7 +2,7 @@
   "params": {
     "name": "papaya-extractor",
     "pre_docker_build": [
-      "pip install cookiecutter globality-build",
+      "pip install cookiecutter",
       "./scripts/instantiate.sh",
       "(cd papaya-extractor && globality-build build-gen local)"
     ]

@@ -22,6 +22,7 @@
         "cd papaya-extractor && globality-build build-gen local"
       ]
     },
+    "deployable": false,
     "name": "papaya-extractor"
   },
   "type": "python-library",

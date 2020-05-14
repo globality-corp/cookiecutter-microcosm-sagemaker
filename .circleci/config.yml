@@ -167,6 +167,9 @@ jobs:
       - run:
           name: Deploy
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
             echo "[distutils]" > ~/.pypirc
             echo "index-servers =" >> ~/.pypirc
             echo "    jfrog " >> ~/.pypirc

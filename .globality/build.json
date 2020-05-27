@@ -23,8 +23,11 @@
       ]
     },
     "deployable": false,
-    "name": "papaya-extractor"
+    "name": "papaya-extractor",
+    "pypi": {
+      "enabled": false
+    }
   },
   "type": "python-library",
-  "version": "2020.19.20"
+  "version": "2020.20.2"
 }

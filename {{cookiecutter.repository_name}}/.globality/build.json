@@ -1,13 +1,5 @@
 {
   "params": {
-    "entrypoint": {
-      "pre_service_commands": [
-        "pip install awscli",
-        "aws s3 cp ${MODEL_LOCATION} .",
-        "mkdir -p /opt/ml/model",
-        "tar -zxf model.tar.gz -C /opt/ml/model"
-      ]
-    },
     "environments": [
       {
         "filters": {
@@ -26,8 +18,8 @@
     },
     "service_port": 80,
     "update_commands": [
-      "globality-build trigger-model-retraining --environment $ENVIRONMENT --image ${AWS_ECR_DOMAIN}/{{ cookiecutter.repository_name }}:${CIRCLE_SHA1} --model-name {{ cookiecutter.repository_name }} --configuration ./active.json"
+      "globality-build trigger-model-retraining-v2 --commit ${CIRCLE_SHA1} --model-name {{ cookiecutter.repository_name }}"
     ]
   },
-  "type": "python-service"
+  "type": "ai-model"
 }

@@ -1,6 +1,5 @@
 *
 !papaya_extractor
-papaya_extractor/tests
 !dist/*-none-any.whl
 !entrypoint.sh
 !MANIFEST.in
@@ -10,4 +9,3 @@ papaya_extractor/tests
 !setup.cfg
 **/*.pyc
 **/*~
-

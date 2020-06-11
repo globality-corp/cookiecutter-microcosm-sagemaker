@@ -28,6 +28,6 @@
       "enabled": false
     }
   },
-  "type": "python-library",
+  "type": "ai-model",
   "version": "2020.22.0"
 }

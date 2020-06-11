@@ -71,19 +71,16 @@ jobs:
       - run:
           name: Build Docker - Application Service Code
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
 
-            docker build --tag $AWS_ECR_DOMAIN/python-library-code:$CIRCLE_SHA1 \
+            docker build --tag $AWS_ECR_DOMAIN/papaya-extractor-code:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
               --build-arg SHA1=$CIRCLE_SHA1 \
               --build-arg EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
               --build-arg JFROG_AUTH=$JFROG_AUTH \
-              --build-arg NAME=python-library \
+              --build-arg NAME=papaya-extractor \
               --target appcode .
 
-            docker push $AWS_ECR_DOMAIN/python-library-code:$CIRCLE_SHA1
+            docker push $AWS_ECR_DOMAIN/papaya-extractor-code:$CIRCLE_SHA1
 
       # ------------------------------------------------------------------------------ #
       # current build - to be phased out
@@ -91,18 +88,16 @@ jobs:
       - run:
           name: Build Docker - Application Service
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
+            
 
-            docker build --tag $AWS_ECR_DOMAIN/python-library:$CIRCLE_SHA1 \
+            docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
               --build-arg SHA1=$CIRCLE_SHA1 \
               --build-arg EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
               --build-arg JFROG_AUTH=$JFROG_AUTH \
               --target service .
 
-            docker push $AWS_ECR_DOMAIN/python-library:$CIRCLE_SHA1
+            docker push $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1
 
 
   test:
@@ -138,10 +133,10 @@ jobs:
             ./scripts/instantiate.sh
             cd papaya-extractor && globality-build build-gen local
             docker run -it --name apphead-services  \
-              --env NAME=python-library \
+              --env NAME=papaya-extractor \
               --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
               --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/python-library/tests \
+              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
               -w /venv/src \
               ${AWS_ECR_DOMAIN}/apphead-services test
 
@@ -179,10 +174,10 @@ jobs:
             ./scripts/instantiate.sh
             cd papaya-extractor && globality-build build-gen local
             docker run -it --name apphead-services -w /venv/src \
-              --env NAME=python-library \
+              --env NAME=papaya-extractor \
               --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
               --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/python-library/tests \
+              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
               ${AWS_ECR_DOMAIN}/apphead-services lint
 
   typehinting:
@@ -217,31 +212,69 @@ jobs:
             ./scripts/instantiate.sh
             cd papaya-extractor && globality-build build-gen local
             docker run -it --name apphead-services -w /venv/src \
-              --env NAME=python-library \
+              --env NAME=papaya-extractor \
               --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
               --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/python-library/tests \
+              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
               ${AWS_ECR_DOMAIN}/apphead-services typehinting
-
-  deploy_jfrog_rc:
-    <<: *defaults
+  deploy_owndev:
+    <<: *deploy_defaults
     steps:
       - attach_workspace:
           at: ~/repo
+      - setup_remote_docker
       - run:
-          name: Deploy
+          name: Deploy owndev
           command: |
-            echo "Not publishing package!"
+            export CLUSTER="service-owndev"
+            export ENVIRONMENT=$(globality-build get-dev --branch ${{CIRCLE_BRANCH}})
+            if [ -z "$ENVIRONMENT" ]
+            then
+                exit 0
+            fi
+            export NAME=papaya-extractor
+            globality-build docker-tag \
+                --service papaya-extractor \
+                --sha ${CIRCLE_SHA1} \
+                --tag ${CIRCLE_BRANCH//\//-}
+            globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
 
-  deploy_pypi:
-    <<: *defaults
+  deploy_demo:
+    <<: *deploy_defaults
     steps:
       - attach_workspace:
           at: ~/repo
+      - setup_remote_docker
       - run:
-          name: Deploy
+          name: Deploy demo
           command: |
-            echo "Not publishing package!"
+            export CLUSTER="service-demo"
+            export ENVIRONMENT=demo
+            if [ -z "$ENVIRONMENT" ]
+            then
+                exit 0
+            fi
+            export NAME=papaya-extractor
+            globality-build docker-tag \
+                --service papaya-extractor \
+                --sha ${CIRCLE_SHA1} \
+                --tag master
+            globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
+
+  backup_ecr_demo:
+    <<: *deploy_defaults
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Backup ECR demo
+          command: |
+            DESTINATION_REGION=eu-west-1
+            eval $(aws ecr get-login --no-include-email --region $DESTINATION_REGION)
+            globality-build docker-duplicate \
+                --service papaya-extractor \
+                --tag master \
+                --destination-region $DESTINATION_REGION \
+                --no-dry-run
 
 
 workflows:
@@ -261,13 +294,6 @@ workflows:
             # run for all branches and tags
             tags:
               only: /.*/
-      - lint:
-          requires:
-            - build_docker
-          filters:
-            # run for all branches and tags
-            tags:
-              only: /.*/
       - test:
           requires:
             - build_docker
@@ -275,11 +301,13 @@ workflows:
             # run for all branches and tags
             tags:
               only: /.*/
-      - deploy_jfrog_rc:
+      - lint:
           requires:
-            - test
-            - lint
-            - typehinting
+            - build_docker
+          filters:
+            # run for all branches and tags
+            tags:
+              only: /.*/
       - typehinting:
           requires:
             - build_docker
@@ -287,15 +315,29 @@ workflows:
             # run for all branches and tags
             tags:
               only: /.*/
-      - deploy_pypi:
+      - deploy_owndev:
           requires:
             - test
             - lint
             - typehinting
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^[0-9]+(\.[0-9]+)*/
+              only: /.*/
+
+      - deploy_demo:
+          requires:
+            - test
+            - lint
+            - typehinting
+          filters:
+            branches:
+              only: master
+
+      - backup_ecr_demo:
+          requires:
+            - deploy_demo
+          filters:
+            branches:
+              only: master
 
 

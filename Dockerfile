@@ -23,20 +23,21 @@ FROM python:slim-stretch as deps
 ARG EXTRA_INDEX_URL
 ENV EXTRA_INDEX_URL ${EXTRA_INDEX_URL}
 
-ENV CORE_PACKAGES locales
+ENV BASE_PACKAGES "libpcre3 libpcre3-dev"
+ENV CORE_PACKAGES locales procps iputils-ping iputils-tracepath
 ENV BUILD_PACKAGES build-essential libffi-dev
-ENV OTHER_PACKAGES libssl-dev
+ENV OTHER_PACKAGES libssl-dev curl
 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ${CORE_PACKAGES} ${BUILD_PACKAGES} && \
+    apt-get install -y --no-install-recommends ${BASE_PACKAGES} ${CORE_PACKAGES} ${BUILD_PACKAGES} && \
+    pip install --no-cache-dir --upgrade uwsgi && \
     apt-get install -y --no-install-recommends ${OTHER_PACKAGES} && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
 
 # ----------- base -----------
-
 FROM deps as base
 
 # Install dependencies
@@ -77,15 +78,17 @@ ENV LC_ALL en_US.UTF-8
 # These are enough to install dependencies and have a stable base layer
 # when source code changes.
 
-COPY README.md MANIFEST.in setup.cfg setup.py /src/
+COPY MANIFEST.in requirements.txt setup.cfg setup.py /src/
 
-RUN pip install --no-cache-dir --upgrade --extra-index-url ${EXTRA_INDEX_URL} /src/ && \
+RUN pip install --no-cache-dir --upgrade -r requirements.txt --extra-index-url ${EXTRA_INDEX_URL} && \
     apt-get remove --purge -y ${BUILD_PACKAGES} && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+# custom commands that are defined in build.json in service repo
 
 # ----------- final -----------
+
 FROM base
 
 # Setup invocation
@@ -94,8 +97,11 @@ FROM base
 # to customize the `dev` and `test` targets.
 
 ENV NAME papaya_extractor
-COPY entrypoint.sh /src/
+COPY README.md entrypoint.sh /src/
 ENTRYPOINT ["./entrypoint.sh"]
+CMD ["uwsgi"]
+EXPOSE 80
+
 
 # Install source
 #
@@ -108,5 +114,14 @@ ARG BUILD_NUM
 ARG SHA1
 ENV PAPAYA_EXTRACTOR__BUILD_INFO_CONVENTION__BUILD_NUM ${BUILD_NUM}
 ENV PAPAYA_EXTRACTOR__BUILD_INFO_CONVENTION__SHA1 ${SHA1}
+
+ENV PAPAYA_EXTRACTOR__BUILD_INFO__BUILD_NUM ${BUILD_NUM}
+ENV PAPAYA_EXTRACTOR__BUILD_INFO__SHA1 ${SHA1}
+
+# Creating below environment variable would be used in entrypoint.sh specifically for AI services to help reference models deployed in S3.
+# By design, below environment variable is not namespaced by repo_name, as opposed to above environment variables which follow microcosm convention.
+# DO NOT REMOVE
+ENV SHA1 ${SHA1}
+
 COPY $NAME /src/$NAME/
 RUN pip install --no-cache-dir --extra-index-url $EXTRA_INDEX_URL -e .

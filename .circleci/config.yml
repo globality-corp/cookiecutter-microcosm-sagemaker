@@ -14,7 +14,7 @@
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.22.0
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.24.10
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -26,7 +26,7 @@ defaults: &defaults
 deploy_defaults: &deploy_defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.22.0
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.24.10
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -63,42 +63,22 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-
       - run:
           name: Login AWS ECR
           command: |
             eval $(aws ecr get-login --no-include-email)
       - run:
-          name: Build Docker - Application Service Code
+          name: Build Docker - pre_docker_build
           command: |
+            # pwd is here to prevent error when pre_docker_build returns nothing
+            pwd
 
-            docker build --tag $AWS_ECR_DOMAIN/papaya-extractor-code:$CIRCLE_SHA1 \
-              --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
-              --build-arg SHA1=$CIRCLE_SHA1 \
-              --build-arg EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
-              --build-arg JFROG_AUTH=$JFROG_AUTH \
-              --build-arg NAME=papaya-extractor \
-              --target appcode .
-
-            docker push $AWS_ECR_DOMAIN/papaya-extractor-code:$CIRCLE_SHA1
-
-      # ------------------------------------------------------------------------------ #
-      # current build - to be phased out
-      # ------------------------------------------------------------------------------ #
-      - run:
-          name: Build Docker - Application Service
-          command: |
-            
 
             docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
               --build-arg SHA1=$CIRCLE_SHA1 \
               --build-arg EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
-              --build-arg JFROG_AUTH=$JFROG_AUTH \
-              --target service .
-
-            docker push $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1
-
+              --build-arg JFROG_AUTH=$JFROG_AUTH .
 
   test:
     <<: *defaults
@@ -108,7 +88,6 @@ jobs:
           at: ~/repo
 
       - setup_remote_docker
-
       - run:
           name: Login AWS ECR
           command: |
@@ -116,29 +95,16 @@ jobs:
 
 
       - run:
-          name: Create Volume - Test Codes
+          name: Copy service tests to volume
           command: |
-            docker create --name service_tests --volume service_tests:/venv/src/papaya_extractor/tests alpine
-            docker cp $(pwd)/papaya_extractor/tests service_tests:/venv/src/papaya_extractor/
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
+            docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
-          name: Create Volume - Application Source Codes
+          name: Run Lint
           command: |
-            docker run --rm -d --name appcode --mount source=service_appcode,target=/venv ${AWS_ECR_DOMAIN}/papaya_extractor-code:${CIRCLE_SHA1}
 
-      - run:
-          name: Run Tests
-          command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
-            docker run -it --name apphead-services  \
-              --env NAME=papaya-extractor \
-              --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
-              --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
-              -w /venv/src \
-              ${AWS_ECR_DOMAIN}/apphead-services test
+            docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} test
 
 
 
@@ -150,35 +116,22 @@ jobs:
           at: ~/repo
 
       - setup_remote_docker
-
       - run:
           name: Login AWS ECR
           command: |
             eval $(aws ecr get-login --no-include-email)
 
       - run:
-          name: Create Volume - Test Codes
+          name: Copy service tests to volume
           command: |
-            docker create --name service_tests --volume service_tests:/venv/src/papaya_extractor/tests alpine
-            docker cp $(pwd)/papaya_extractor/tests service_tests:/venv/src/papaya_extractor/
-
-      - run:
-          name: Create Volume - Application Source Codes
-          command: |
-            docker run --rm -d --name appcode --mount source=service_appcode,target=/venv ${AWS_ECR_DOMAIN}/papaya_extractor-code:${CIRCLE_SHA1}
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
+            docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
           name: Run Lint
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
-            docker run -it --name apphead-services -w /venv/src \
-              --env NAME=papaya-extractor \
-              --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
-              --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
-              ${AWS_ECR_DOMAIN}/apphead-services lint
+            docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} lint
+
 
   typehinting:
     <<: *defaults
@@ -188,35 +141,22 @@ jobs:
           at: ~/repo
 
       - setup_remote_docker
-
       - run:
           name: Login AWS ECR
           command: |
             eval $(aws ecr get-login --no-include-email)
 
       - run:
-          name: Create Volume - Test Codes
+          name: Copy service tests to volume
           command: |
-            docker create --name service_tests --volume service_tests:/venv/src/papaya_extractor/tests alpine
-            docker cp $(pwd)/papaya_extractor/tests service_tests:/venv/src/papaya_extractor/
-
-      - run:
-          name: Create Volume - Application Source Codes
-          command: |
-            docker run --rm -d --name appcode --mount source=service_appcode,target=/venv ${AWS_ECR_DOMAIN}/papaya_extractor-code:${CIRCLE_SHA1}
+            docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
+            docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
           name: Run Typehinting
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
-            docker run -it --name apphead-services -w /venv/src \
-              --env NAME=papaya-extractor \
-              --env EXTRA_INDEX_URL=$EXTRA_INDEX_URL \
-              --mount source=service_appcode,target=/venv \
-              --mount source=service_tests,target=/venv/src/papaya-extractor/tests \
-              ${AWS_ECR_DOMAIN}/apphead-services typehinting
+            docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} typehinting
+
   deploy_owndev:
     <<: *deploy_defaults
     steps:
@@ -227,7 +167,7 @@ jobs:
           name: Deploy owndev
           command: |
             export CLUSTER="service-owndev"
-            export ENVIRONMENT=$(globality-build get-dev --branch ${{CIRCLE_BRANCH}})
+            export ENVIRONMENT=$(globality-build get-dev --branch ${CIRCLE_BRANCH})
             if [ -z "$ENVIRONMENT" ]
             then
                 exit 0
@@ -268,7 +208,9 @@ jobs:
       - run:
           name: Backup ECR demo
           command: |
+            # login to both regions is required to perform copy
             DESTINATION_REGION=eu-west-1
+            eval $(aws ecr get-login --no-include-email)
             eval $(aws ecr get-login --no-include-email --region $DESTINATION_REGION)
             globality-build docker-duplicate \
                 --service papaya-extractor \

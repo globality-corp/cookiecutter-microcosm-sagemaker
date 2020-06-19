@@ -60,7 +60,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - circle_bootstrap:
+      - run:
         name: Bootstrap
         command: |
             pip install cookiecutter
@@ -95,7 +95,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - circle_bootstrap:
+      - run:
           name: Bootstrap
           command: |
             pip install cookiecutter
@@ -129,7 +129,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - circle_bootstrap:
+      - run:
           name: Bootstrap
           command: |
             pip install cookiecutter
@@ -160,7 +160,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - circle_bootstrap:
+      - run:
           name: Bootstrap
           command: |
             pip install cookiecutter

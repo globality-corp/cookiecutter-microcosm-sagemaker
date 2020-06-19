@@ -73,6 +73,9 @@ jobs:
             # pwd is here to prevent error when pre_docker_build returns nothing
             pwd
 
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
 
             docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \

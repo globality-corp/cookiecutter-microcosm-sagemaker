@@ -32,8 +32,6 @@ if [ "$1" = "uwsgi" ]; then
         --gid nogroup \
         --disable-logging \
         --processes ${UWSGI_NUM_PROCESSES:-4} \
-        --stats 0.0.0.0:5050 \
-        --stats-http \
         --need-app --module ${NAME}.wsgi:app
 elif [ "$1" = "dev" ]; then
     exec runserver --host 0.0.0.0 --port 80

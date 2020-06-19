@@ -60,6 +60,13 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - circle_bootstrap:
+        name: Bootstrap
+        command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
       - setup_remote_docker:
           docker_layer_caching: true
 
@@ -72,10 +79,6 @@ jobs:
           command: |
             # pwd is here to prevent error when pre_docker_build returns nothing
             pwd
-
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
 
             docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
@@ -92,6 +95,13 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - circle_bootstrap:
+          name: Bootstrap
+          command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
       - setup_remote_docker
       - run:
           name: Login AWS ECR
@@ -108,9 +118,6 @@ jobs:
       - run:
           name: Run Lint
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} test
 
 
@@ -122,6 +129,13 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - circle_bootstrap:
+          name: Bootstrap
+          command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
       - setup_remote_docker
       - run:
           name: Login AWS ECR
@@ -137,9 +151,6 @@ jobs:
       - run:
           name: Run Lint
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} lint
 
   typehinting:
@@ -148,6 +159,13 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
+
+      - circle_bootstrap:
+          name: Bootstrap
+          command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
 
       - setup_remote_docker
       - run:
@@ -164,9 +182,6 @@ jobs:
       - run:
           name: Run Typehinting
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} typehinting
   deploy_owndev:
     <<: *deploy_defaults

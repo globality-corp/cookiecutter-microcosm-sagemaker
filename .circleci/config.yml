@@ -60,15 +60,15 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
+      - setup_remote_docker:
+        docker_layer_caching: true
+
       - run:
         name: Bootstrap
         command: |
             pip install cookiecutter
             ./scripts/instantiate.sh
             cd papaya-extractor && globality-build build-gen local
-
-      - setup_remote_docker:
-          docker_layer_caching: true
 
       - run:
           name: Login AWS ECR

@@ -64,13 +64,6 @@ jobs:
         docker_layer_caching: true
 
       - run:
-        name: Bootstrap
-        command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
-
-      - run:
           name: Login AWS ECR
           command: |
             eval $(aws ecr get-login --no-include-email)

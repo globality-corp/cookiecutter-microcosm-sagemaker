@@ -7,5 +7,6 @@
 !requirements.txt
 !setup.py
 !setup.cfg
+!pyproject.toml
 **/*.pyc
 **/*~

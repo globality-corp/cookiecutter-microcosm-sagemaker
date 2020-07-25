@@ -44,7 +44,7 @@ elif [ "$1" = "test" ]; then
     pip --quiet install \
         --extra-index-url $EXTRA_INDEX_URL \
         .[test] nose "PyHamcrest<1.10.0" coverage
-    exec nosetests ${NAME} --exclude api_contract_test
+    exec nosetests
 elif [ "$1" = "api-contract-test" ]; then
     pip --quiet install \
         --extra-index-url $EXTRA_INDEX_URL \

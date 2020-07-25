@@ -7,7 +7,7 @@ from microcosm_sagemaker.testing.bundle import (
     BundleTestCase,
 )
 
-from {{ cookiecutter.package_name }}.tests.fixtures import get_fixture_path
+from {{cookiecutter.package_name}}.tests.fixtures import get_fixture_path
 
 
 class ExampleBundleTestCase(BundleTestCase):

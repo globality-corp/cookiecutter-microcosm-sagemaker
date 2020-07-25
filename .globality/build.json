@@ -1,7 +1,23 @@
 {
   "params": {
-    "name": "cookiecutter-microcosm-sagemaker"
+    "circle_bootstrap": {
+      "copy_service_tests": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ],
+      "docker_build": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ]
+    },
+    "deployable": false,
+    "name": "papaya-extractor",
+    "pypi": {
+      "enabled": false
+    }
   },
-  "type": "python-service",
-  "version": "2020.8.20"
+  "type": "ai-model",
+  "version": "2020.29.10"
 }

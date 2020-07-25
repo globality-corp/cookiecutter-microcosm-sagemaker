@@ -3,8 +3,7 @@
     "author_email": "engineering@globality.com",
     "organization_name": "globality-corp",
     "project_name": "Papaya extractor",
-    "is_nlp_project": "n",
-    "repository_name": "{{'ml-nlp-' if cookiecutter.is_nlp_project.startswith('y') else 'ml-'}}{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
+    "repository_name": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
     "package_name": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
     "project_version": "0.1.0",
     "short_description": "Short Project Description"

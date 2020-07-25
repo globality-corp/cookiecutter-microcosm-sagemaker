@@ -11,6 +11,9 @@
 #
 #
 
+# Optionally import other docker images that are used downstream to copy data
+# from pre-build repositories
+
 # ----------- deps -----------
 # Install from Debian Stretch with modern Python support
 FROM python:slim-stretch as deps
@@ -22,6 +25,9 @@ FROM python:slim-stretch as deps
 
 ARG EXTRA_INDEX_URL
 ENV EXTRA_INDEX_URL ${EXTRA_INDEX_URL}
+
+ARG WANDB_API_KEY
+ENV WANDB_API_KEY ${WANDB_API_KEY}
 
 ENV BASE_PACKAGES "libpcre3 libpcre3-dev"
 ENV CORE_PACKAGES locales procps iputils-ping iputils-tracepath
@@ -43,8 +49,9 @@ FROM deps as base
 # Install dependencies
 #
 # Since many Python distributions require a compile for their native dependencies
-# we install a compiler and any required development libraries before the installation
-# and then *remove* the the compiler when we are done.
+# we install a compiler and any required development libraries before the installation.
+# At the end, we will *remove* the compiler when we are done, to reduce the size of the
+# docker image.
 #
 # We can control dependency freezing by managing the contents of `requirements.txt`.
 #
@@ -78,12 +85,10 @@ ENV LC_ALL en_US.UTF-8
 # These are enough to install dependencies and have a stable base layer
 # when source code changes.
 
-COPY MANIFEST.in requirements.txt setup.cfg setup.py /src/
+# copy pyproject.toml only if exists
+COPY MANIFEST.in requirements.txt setup.cfg setup.py pyproject.tom[l] /src/
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt --extra-index-url ${EXTRA_INDEX_URL} && \
-    apt-get remove --purge -y ${BUILD_PACKAGES} && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir --upgrade -r requirements.txt --extra-index-url ${EXTRA_INDEX_URL}
 
 # custom commands that are defined in build.json in service repo
 
@@ -96,7 +101,7 @@ FROM base
 # We expose the application on the standard HTTP port and use an entrypoint
 # to customize the `dev` and `test` targets.
 
-ENV NAME cookiecutter_microcosm_sagemaker
+ENV NAME papaya_extractor
 COPY README.md entrypoint.sh /src/
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["uwsgi"]
@@ -112,11 +117,23 @@ EXPOSE 80
 
 ARG BUILD_NUM
 ARG SHA1
-ENV COOKIECUTTER_MICROCOSM_SAGEMAKER__BUILD_INFO_CONVENTION__BUILD_NUM ${BUILD_NUM}
-ENV COOKIECUTTER_MICROCOSM_SAGEMAKER__BUILD_INFO_CONVENTION__SHA1 ${SHA1}
+ENV PAPAYA_EXTRACTOR__BUILD_INFO_CONVENTION__BUILD_NUM ${BUILD_NUM}
+ENV PAPAYA_EXTRACTOR__BUILD_INFO_CONVENTION__SHA1 ${SHA1}
 
-ENV COOKIECUTTER_MICROCOSM_SAGEMAKER__BUILD_INFO__BUILD_NUM ${BUILD_NUM}
-ENV COOKIECUTTER_MICROCOSM_SAGEMAKER__BUILD_INFO__SHA1 ${SHA1}
+ENV PAPAYA_EXTRACTOR__BUILD_INFO__BUILD_NUM ${BUILD_NUM}
+ENV PAPAYA_EXTRACTOR__BUILD_INFO__SHA1 ${SHA1}
+
+# Creating below environment variable would be used in entrypoint.sh specifically for AI services to help reference models deployed in S3.
+# By design, below environment variable is not namespaced by repo_name, as opposed to above environment variables which follow microcosm convention.
+# DO NOT REMOVE
+ENV SHA1 ${SHA1}
+
+# Configuration required by wandb product
+ENV WANDB_CONFIG_DIR /src
 
 COPY $NAME /src/$NAME/
 RUN pip install --no-cache-dir --extra-index-url $EXTRA_INDEX_URL -e .
+
+RUN apt-get remove --purge -y ${BUILD_PACKAGES} && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*

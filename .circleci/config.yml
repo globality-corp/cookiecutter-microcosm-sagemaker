@@ -75,6 +75,9 @@ jobs:
             # pwd is here to prevent error when pre_docker_build returns nothing
             pwd
 
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
 
             docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \
@@ -108,7 +111,9 @@ jobs:
       - run:
           name: Run Lint
           command: |
-
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
             docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} test
 
 
@@ -135,8 +140,10 @@ jobs:
       - run:
           name: Run Lint
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} lint
-
 
   typehinting:
     <<: *defaults
@@ -160,8 +167,10 @@ jobs:
       - run:
           name: Run Typehinting
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} typehinting
-
   deploy_owndev:
     <<: *deploy_defaults
     steps:

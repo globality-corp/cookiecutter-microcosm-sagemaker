@@ -16,7 +16,7 @@
 
 # ----------- deps -----------
 # Install from Debian Stretch with modern Python support
-FROM [] as deps
+FROM python:slim-stretch as deps
 
 #
 # Most services will use the same set of packages here, though a few will install

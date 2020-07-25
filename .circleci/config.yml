@@ -105,15 +105,16 @@ jobs:
       - run:
           name: Copy service tests to volume
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
             docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
           name: Run Lint
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} test
 
 
@@ -134,15 +135,16 @@ jobs:
       - run:
           name: Copy service tests to volume
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
             docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
           name: Run Lint
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} lint
 
   typehinting:
@@ -161,15 +163,16 @@ jobs:
       - run:
           name: Copy service tests to volume
           command: |
+            pip install cookiecutter
+            ./scripts/instantiate.sh
+            cd papaya-extractor && globality-build build-gen local
+
             docker create -v /src/papaya_extractor/tests/ --name service_tests alpine:3.11 /bin/true
             docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
           name: Run Typehinting
           command: |
-            pip install cookiecutter
-            ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
             docker run -it --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} typehinting
   deploy_owndev:
     <<: *deploy_defaults

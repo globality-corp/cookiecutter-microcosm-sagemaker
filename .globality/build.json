@@ -1,22 +1,12 @@
 {
   "params": {
     "circle_bootstrap": {
+      "copy_service_tests": [
+        "pip install cookiecutter",
+        "./scripts/instantiate.sh",
+        "cd papaya-extractor && globality-build build-gen local"
+      ],
       "docker_build": [
-        "pip install cookiecutter",
-        "./scripts/instantiate.sh",
-        "cd papaya-extractor && globality-build build-gen local"
-      ],
-      "lint": [
-        "pip install cookiecutter",
-        "./scripts/instantiate.sh",
-        "cd papaya-extractor && globality-build build-gen local"
-      ],
-      "test": [
-        "pip install cookiecutter",
-        "./scripts/instantiate.sh",
-        "cd papaya-extractor && globality-build build-gen local"
-      ],
-      "typehinting": [
         "pip install cookiecutter",
         "./scripts/instantiate.sh",
         "cd papaya-extractor && globality-build build-gen local"

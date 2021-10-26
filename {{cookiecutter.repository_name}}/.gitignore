@@ -106,3 +106,6 @@ build.{{ cookiecutter.package_name }}/docker-base/*
 .mypy_cache
 
 /coverage/
+
+# IDEs
+.idea/

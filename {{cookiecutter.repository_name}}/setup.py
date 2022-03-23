@@ -23,9 +23,6 @@ setup(
         "microcosm>=2.12.2",
         "pyOpenSSL>=18.0.0",
     ],
-    setup_requires=[
-        "nose>=1.3.7",
-    ],
     entry_points={
         "microcosm_sagemaker.app_hooks": [
             "train = {{ cookiecutter.package_name }}.app_hooks.train.app:create_app",
@@ -36,7 +33,6 @@ setup(
     extras_require={
         "test": [
             "coverage>=4.0.3",
-            "PyHamcrest>=1.9.0",
         ],
     },
 )

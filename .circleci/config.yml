@@ -10,11 +10,12 @@
 #  See: http://github.com/globality-corp/globality-build
 #
 #
+version: 2.1
 
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.29.1
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2022.12.1
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -27,7 +28,7 @@ defaults: &defaults
 deploy_defaults: &deploy_defaults
   working_directory: ~/repo
   docker:
-    - image: ${AWS_ECR_DOMAIN}/globality-build:2020.29.1
+    - image: ${AWS_ECR_DOMAIN}/globality-build:2022.12.1
       aws_auth:
         aws_access_key_id: ${AWS_ACCESS_KEY_ID}
         aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
@@ -41,8 +42,6 @@ deploy_defaults: &deploy_defaults
 whitelist: &whitelist
   paths:
     .
-
-version: 2
 
 jobs:
   checkout:
@@ -63,12 +62,13 @@ jobs:
           at: ~/repo
 
       - setup_remote_docker:
+          version: 19.03.12
           docker_layer_caching: true
 
       - run:
           name: Login AWS ECR
           command: |
-            eval $(aws ecr get-login --no-include-email)
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_DOMAIN}
       - run:
           name: Build Docker - pre_docker_build
           command: |
@@ -95,11 +95,14 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
+
       - run:
           name: Login AWS ECR
           command: |
-            eval $(aws ecr get-login --no-include-email)
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_DOMAIN}
 
 
       - run:
@@ -113,9 +116,10 @@ jobs:
             docker cp $(pwd)/papaya_extractor/tests service_tests:/src/papaya_extractor/
 
       - run:
-          name: Run Lint
+          name: Run Test
           command: |
             docker run -it  --volumes-from service_tests ${AWS_ECR_DOMAIN}/papaya-extractor:${CIRCLE_SHA1} test
+
 
 
 
@@ -126,11 +130,14 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
+
       - run:
           name: Login AWS ECR
           command: |
-            eval $(aws ecr get-login --no-include-email)
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_DOMAIN}
 
       - run:
           name: Copy service tests to volume
@@ -154,11 +161,14 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
+
       - run:
           name: Login AWS ECR
           command: |
-            eval $(aws ecr get-login --no-include-email)
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ECR_DOMAIN}
 
       - run:
           name: Copy service tests to volume
@@ -179,7 +189,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
       - run:
           name: Deploy owndev
           command: |
@@ -196,14 +208,14 @@ jobs:
                 --tag ${CIRCLE_BRANCH//\//-}
 
             globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
-
-
   deploy_demo:
     <<: *deploy_defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
       - run:
           name: Deploy demo
           command: |
@@ -220,12 +232,12 @@ jobs:
                 --tag master
 
             globality-build deploy --service $NAME --environment $ENVIRONMENT --sha ${CIRCLE_SHA1} --cluster $CLUSTER
-
-
   backup_ecr_demo:
     <<: *deploy_defaults
     steps:
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 19.03.12
+          docker_layer_caching: true
       - run:
           name: Backup ECR demo
           command: |
@@ -241,16 +253,19 @@ jobs:
 
 
 workflows:
-  version: 2
 
   build-and-release:
     jobs:
       - checkout:
+          context:
+          - Globality-Common
           filters:
             # run for all branches and tags
             tags:
               only: /.*/
       - build_docker:
+          context:
+          - Globality-Common
           requires:
             - checkout
           filters:
@@ -258,6 +273,8 @@ workflows:
             tags:
               only: /.*/
       - test:
+          context:
+          - Globality-Common
           requires:
             - build_docker
           filters:
@@ -265,6 +282,8 @@ workflows:
             tags:
               only: /.*/
       - lint:
+          context:
+          - Globality-Common
           requires:
             - build_docker
           filters:
@@ -272,15 +291,17 @@ workflows:
             tags:
               only: /.*/
       - typehinting:
+          context:
+          - Globality-Common
           requires:
             - build_docker
           filters:
             # run for all branches and tags
             tags:
               only: /.*/
- 
-
       - deploy_owndev:
+          context:
+          - Globality-Common
           requires:
             - test
             - lint
@@ -289,10 +310,9 @@ workflows:
             branches:
               only: /.*/
 
-
- 
-
       - deploy_demo:
+          context:
+          - Globality-Common
           requires:
             - test
             - lint
@@ -301,8 +321,9 @@ workflows:
             branches:
               only: master
 
-
       - backup_ecr_demo:
+          context:
+          - Globality-Common
           requires:
             - deploy_demo
           filters:

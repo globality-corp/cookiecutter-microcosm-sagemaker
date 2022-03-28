@@ -77,7 +77,8 @@ jobs:
 
             pip install cookiecutter globality-build
             ./scripts/instantiate.sh
-            cd papaya-extractor && globality-build build-gen local
+            #cd papaya-extractor && globality-build build-gen local
+            cd papaya-extractor
 
             docker build --tag $AWS_ECR_DOMAIN/papaya-extractor:$CIRCLE_SHA1 \
               --build-arg BUILD_NUM=$CIRCLE_BUILD_NUM \

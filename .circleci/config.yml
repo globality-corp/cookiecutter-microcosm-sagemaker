@@ -75,7 +75,7 @@ jobs:
             # pwd is here to prevent error when pre_docker_build returns nothing
             pwd
 
-            pip install cookiecutter
+            pip install cookiecutter globality-build
             ./scripts/instantiate.sh
             cd papaya-extractor && globality-build build-gen local
 

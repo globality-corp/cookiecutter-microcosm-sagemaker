@@ -1,0 +1,19 @@
+#  This file is auto generated with globality-build.
+#  You should not make any changes to this file manually
+#
+#  See: http://github.com/globality-corp/globality-build
+#
+# Additional dependencies should be specified in `.globality/build.json` under
+# `params.extra_requirements_build`.
+
+-c requirements.txt
+coverage
+flake8
+flake8-isort
+flake8-logging-format
+flake8-print
+pip-tools
+PyHamcrest
+pytest
+pytest-cov
+

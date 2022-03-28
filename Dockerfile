@@ -15,8 +15,8 @@
 # from pre-build repositories
 
 # ----------- deps -----------
-# Install from Debian Stretch with modern Python support
-FROM python:slim-stretch as deps
+# Start with a Debian-based image (with apt-get)
+FROM python:3.7-alpine as deps
 
 #
 # Most services will use the same set of packages here, though a few will install
@@ -29,6 +29,8 @@ ENV EXTRA_INDEX_URL ${EXTRA_INDEX_URL}
 ARG WANDB_API_KEY
 ENV WANDB_API_KEY ${WANDB_API_KEY}
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 ENV BASE_PACKAGES "libpcre3 libpcre3-dev"
 ENV CORE_PACKAGES locales procps iputils-ping iputils-tracepath
 ENV BUILD_PACKAGES build-essential libffi-dev
@@ -37,7 +39,6 @@ ENV OTHER_PACKAGES libssl-dev curl
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ${BASE_PACKAGES} ${CORE_PACKAGES} ${BUILD_PACKAGES} && \
-    pip install --no-cache-dir --upgrade uwsgi && \
     apt-get install -y --no-install-recommends ${OTHER_PACKAGES} && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
@@ -85,12 +86,14 @@ ENV LC_ALL en_US.UTF-8
 # These are enough to install dependencies and have a stable base layer
 # when source code changes.
 
-# copy pyproject.toml only if exists
-COPY MANIFEST.in requirements.txt setup.cfg setup.py pyproject.tom[l] /src/
-
-RUN pip install --no-cache-dir --upgrade -r requirements.txt --extra-index-url ${EXTRA_INDEX_URL}
+# copy pyproject.toml, mypy.ini, requirements-build.txt only if they exist
+COPY MANIFEST.in requirements.txt requirements-build.tx[t] setup.cfg setup.py pyproject.tom[l] mypy.in[i] conftest.py /src/
 
 # custom commands that are defined in build.json in service repo
+
+RUN pip install --upgrade pip wheel && \
+    pip install --no-cache-dir --upgrade uwsgi && \
+    pip install --no-cache-dir --upgrade -r requirements.txt --extra-index-url ${EXTRA_INDEX_URL}
 
 # ----------- final -----------
 
@@ -132,6 +135,7 @@ ENV SHA1 ${SHA1}
 ENV WANDB_CONFIG_DIR /src
 
 COPY $NAME /src/$NAME/
+
 RUN pip install --no-cache-dir --extra-index-url $EXTRA_INDEX_URL -e .
 
 RUN apt-get remove --purge -y ${BUILD_PACKAGES} && \
